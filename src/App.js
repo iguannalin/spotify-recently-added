@@ -34,7 +34,7 @@ class Songs extends Component {
 
   render() {
     const mid = '';
-    const ruri = 'https://iguannalin.github.io/spotify-recently-added/';
+    const ruri = 'https://iguannalin.github.io/spotify-recently-added';
     const authEndpoint = "https://accounts.spotify.com/authorize?client_id="+mid+"&response_type=code&redirect_uri="+ruri+"&scopes=user-library-read";
     return (
       <div className="Song">
