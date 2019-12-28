@@ -9,25 +9,13 @@ class Songs extends Component {
   };
 
   componentDidMount() {
-    this.getToken('', '');
+    this.getToken();
   }
 
-  getToken(mid, ms) {
-    fetch(('https://accounts.spotify.com/api/token?scopes=user-library-read'), 
-      {
-        method: 'POST',
-        'Access-Control-Allow-Headers': {
-          'mode': 'no-cors',
-          'access-control-allow-origin': '*'
-        },
-        headers: {
-          'Authorization': 'Basic '+ btoa(mid+':'+ms),
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'grant_type=client_credentials'
-      })
-      .then(res => res.json())
-      .then(data => this.getLibrary(data.access_token));
+  getToken() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    console.log('CODE', code)
   }
 
   getLibrary(at) {
@@ -45,8 +33,12 @@ class Songs extends Component {
   }
 
   render() {
+    const mid = '';
+    const ruri = '';
     return (
-      <div className="Song"></div>
+      <div className="Song">
+        <a href="https://accounts.spotify.com/authorize?client_id="+mid+"&response_type=code&redirect_uri="+ruri+"&scopes=user-library-read">LINK</a>
+      </div>
     );
   }
 }
