@@ -35,9 +35,10 @@ class Songs extends Component {
   render() {
     const mid = '';
     const ruri = '';
+    const authEndpoint = "https://accounts.spotify.com/authorize?client_id="+mid+"&response_type=code&redirect_uri="+ruri+"&scopes=user-library-read";
     return (
       <div className="Song">
-        <a href="https://accounts.spotify.com/authorize?client_id="+mid+"&response_type=code&redirect_uri="+ruri+"&scopes=user-library-read">LINK</a>
+        <a href={`authEndpoint`}>LINK</a>
       </div>
     );
   }
