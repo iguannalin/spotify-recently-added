@@ -2,23 +2,42 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+ class Song extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="track">
+        { this.props.track }
+      </div>
+    );
+  }
+}
+
+
 class Songs extends Component {
   constructor(props) {
     super(props);
-    this.getToken = this.getToken.bind(this);
+    this.state = {
+      playlist: []
+    }
   };
 
   componentDidMount() {
-    this.getToken();
+    this.getLibrary(this.getToken());
   }
 
   getToken() {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     console.log('CODE', code)
+    return code;
   }
 
   getLibrary(at) {
+    console.log('CODE', at);
     fetch("https://api.spotify.com/v1/me/tracks?limit=20", {
         'Access-Control-Allow-Headers': {
           'mode': 'no-cors',
@@ -29,16 +48,43 @@ class Songs extends Component {
         }
     })
     .then(r => r.json())
-    .then(data=>{ console.log('tracks data ', data)});
+    .then(data=>{ this.compileList(data); });
+  }
+
+  compileList(tracks) {
+    this.setState({playlist: []});
+    console.log('list tracks', tracks);
+
+    if (tracks.items) {
+      tracks.items.forEach(item => {
+        const track = {
+          name: item.name,
+          link: item.href,
+          artists: item.artists.map(artist => { return { name: artist.name, link: artist.href }})
+        }
+        this.setState({
+          playlist: this.state.playlist.push(track)
+        })}
+      );
+    }
   }
 
   render() {
     const mid = '';
-    const ruri = 'https://iguannalin.github.io/spotify-recently-added';
-    const authEndpoint = "https://accounts.spotify.com/authorize?client_id="+mid+"&response_type=code&redirect_uri="+ruri+"&scopes=user-library-read";
+    const ruri = 'https://iguannalin.github.io/spotify-recently-added/';
+    const authEndpoint = "https://accounts.spotify.com/authorize?client_id="+mid+"&response_type=code&redirect_uri="+ruri+"&scope=user-library-read";
     return (
-      <div className="Song">
+      <div className="Playlist">
         <a href={`${authEndpoint}`}>LINK</a>
+        <ul>
+          { this.state.playlist.forEach(
+            track => {
+              return (
+                <Song track={track}></Song>
+              )
+            }
+          )}
+        </ul>
       </div>
     );
   }
