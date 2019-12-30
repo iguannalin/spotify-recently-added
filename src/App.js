@@ -31,7 +31,7 @@ class Songs extends Component {
     super(props);
     this.state = {
       playlist: [],
-      ruri: 'http://localhost:3000/',
+      ruri: 'https://iguannalin.github.io/spotify-recently-added/',
       mid: '',
       ms: '',
       endpoints: {
