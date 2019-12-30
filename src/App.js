@@ -30,9 +30,19 @@ class Songs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      playlist: []
+      playlist: [],
+      ruri: 'http://localhost:3000/',
+      mid: '',
+      ms: '',
+      endpoints: {
+        authorize: 'https://accounts.spotify.com/authorize'
+      }
     }
   };
+
+  generateAuthLink() {
+    return this.state.endpoints.authorize + '?client_id=' + this.state.mid + '&response_type=code&redirect_uri='+this.state.ruri+'&scope=user-library-read';
+  }
 
   componentDidMount() {
     this.getToken(this.getCode());
@@ -44,8 +54,7 @@ class Songs extends Component {
   }
 
   getToken(ac) {
-    const encodedAC = '';
-    const ruri = 'https://iguannalin.github.io/spotify-recently-added/';
+    const encodedBody = window.btoa(this.state.mid+':'+this.state.ms);
     console.log('CODE', ac);
 
     fetch('https://accounts.spotify.com/api/token', {
@@ -54,10 +63,11 @@ class Songs extends Component {
         'mode': 'no-cors',
         'access-control-allow-origin': '*'
       },
-      body: `grant_type=authorization_code&code=${ac}&redirect_uri=${ruri}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-      }
+        'Authorization': `Basic ${encodedBody}` 
+      },
+      body: `grant_type=authorization_code&code=${ac}&redirect_uri=${this.state.ruri}`,
     })
     .then(r => { if (r.ok) return r.json() })
     .then(data => { if (data && data.access_token) this.getLibrary(data.access_token) });
@@ -89,12 +99,10 @@ class Songs extends Component {
 
   compileList(tracks) {
     this.setState((state) => { return {playlist: []} });
-    console.log('list tracks', tracks);
 
     if (tracks && tracks.items) {
       tracks.items.forEach(object => {
         const item = object.track;
-        console.log('COMPILE LISTTRACK', item);
         const track = {
           name: item.name,
           link: item.href,
@@ -110,12 +118,9 @@ class Songs extends Component {
   }
 
   render() {
-    const mid = '';
-    const ruri = 'https://iguannalin.github.io/spotify-recently-added/';
-    const authEndpoint = "https://accounts.spotify.com/authorize?client_id="+mid+"&response_type=code&redirect_uri="+ruri+"&scope=user-library-read";
     return (
       <div className="Playlist">
-        <a href={`${authEndpoint}`}>LINK</a>
+        <a href={this.generateAuthLink()}>LINK</a>
         <ul>
           {
               this.state.playlist.map(
