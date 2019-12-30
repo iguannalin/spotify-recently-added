@@ -10,7 +10,16 @@ import './App.css';
   render() {
     return (
       <div className="track">
-        { this.props.track }
+        <div className="trackTitle">
+          <a href={this.props.track.link}>{this.props.track.name}</a>
+        </div>
+        <div className="trackArtist">
+          {
+            this.props.track.artists.map(artist => {
+              return (<a href={artist.link}>{artist.name}</a>);
+            })
+          }
+        </div>
       </div>
     );
   }
@@ -26,19 +35,38 @@ class Songs extends Component {
   };
 
   componentDidMount() {
-    this.getLibrary(this.getToken());
+    this.getToken(this.getCode());
   }
 
-  getToken() {
+  getCode() {
     const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    console.log('CODE', code)
-    return code;
+    return urlParams.get('code');
+  }
+
+  getToken(ac) {
+    const encodedAC = '';
+    const ruri = 'https://iguannalin.github.io/spotify-recently-added/';
+    console.log('CODE', ac);
+
+    fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      'Access-Control-Allow-Headers': {
+        'mode': 'no-cors',
+        'access-control-allow-origin': '*'
+      },
+      body: `grant_type=authorization_code&code=${ac}&redirect_uri=${ruri}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }
+    })
+    .then(r => { if (r.ok) return r.json() })
+    .then(data => { if (data && data.access_token) this.getLibrary(data.access_token) });
+    return;
   }
 
   getLibrary(at) {
-    console.log('CODE', at);
-    fetch("https://api.spotify.com/v1/me/tracks?limit=20", {
+    console.log('TOKEN', at);
+    fetch('https://api.spotify.com/v1/me/tracks?limit=20', {
         'Access-Control-Allow-Headers': {
           'mode': 'no-cors',
           'access-control-allow-origin': '*'
@@ -47,24 +75,36 @@ class Songs extends Component {
           'Authorization': `Bearer ${at}`
         }
     })
-    .then(r => r.json())
-    .then(data=>{ this.compileList(data); });
+    .then(r => {
+      if (r.ok) {
+        return r.json();
+      }
+      else {
+        console.log('Error: getLibrary');
+        return;
+      }
+    })
+    .then(data => { if (data) this.compileList(data); });
   }
 
   compileList(tracks) {
-    this.setState({playlist: []});
+    this.setState((state) => { return {playlist: []} });
     console.log('list tracks', tracks);
 
-    if (tracks.items) {
-      tracks.items.forEach(item => {
+    if (tracks && tracks.items) {
+      tracks.items.forEach(object => {
+        const item = object.track;
+        console.log('COMPILE LISTTRACK', item);
         const track = {
           name: item.name,
           link: item.href,
           artists: item.artists.map(artist => { return { name: artist.name, link: artist.href }})
         }
-        this.setState({
-          playlist: this.state.playlist.push(track)
-        })}
+        const tempPlaylist = this.state.playlist;
+        tempPlaylist.push(track);
+        this.setState((state) => {return {
+          playlist: tempPlaylist
+        }})}
       );
     }
   }
@@ -77,13 +117,15 @@ class Songs extends Component {
       <div className="Playlist">
         <a href={`${authEndpoint}`}>LINK</a>
         <ul>
-          { this.state.playlist.forEach(
-            track => {
-              return (
-                <Song track={track}></Song>
-              )
-            }
-          )}
+          {
+              this.state.playlist.map(
+              track => {
+                return (
+                  <Song track={track}></Song>
+                )
+              }
+            )
+          }
         </ul>
       </div>
     );
