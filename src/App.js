@@ -70,7 +70,7 @@ class Songs extends Component {
   }
 
   render() {
-    const mid = '6dc15fdee3cc4723b9f2a422b7f35305';
+    const mid = '';
     const ruri = 'https://iguannalin.github.io/spotify-recently-added/';
     const authEndpoint = "https://accounts.spotify.com/authorize?client_id="+mid+"&response_type=code&redirect_uri="+ruri+"&scope=user-library-read";
     return (
