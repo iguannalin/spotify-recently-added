@@ -32,8 +32,8 @@ class Songs extends Component {
     this.state = {
       playlist: [],
       ruri: 'https://iguannalin.github.io/spotify-recently-added/',
-      mid: '',
-      ms: '',
+      mid: '6dc15fdee3cc4723b9f2a422b7f35305',
+      ms: 'a577356d88d340828944780fc72e6749',
       endpoints: {
         authorize: 'https://accounts.spotify.com/authorize'
       }
