@@ -118,9 +118,11 @@ class Songs extends Component {
   }
 
   render() {
+    const authLink = this.generateAuthLink();
+    console.log('LINK ', authLink);
     return (
       <div className="Playlist">
-        <a href={this.generateAuthLink()}>LINK</a>
+        <a href={authLink}>LINK</a>
         <ul>
           { this.state.playlist.map(
               track => {
