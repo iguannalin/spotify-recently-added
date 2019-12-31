@@ -105,8 +105,8 @@ class Songs extends Component {
         const item = object.track;
         const track = {
           name: item.name,
-          link: item.href,
-          artists: item.artists.map(artist => { return { name: artist.name, link: artist.href }})
+          link: item.external_urls.spotify,
+          artists: item.artists.map(artist => { return { name: artist.name, link: artist.external_urls.spotify }})
         }
         const tempPlaylist = this.state.playlist;
         tempPlaylist.push(track);
