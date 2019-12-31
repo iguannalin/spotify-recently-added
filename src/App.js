@@ -122,8 +122,7 @@ class Songs extends Component {
       <div className="Playlist">
         <a href={this.generateAuthLink()}>LINK</a>
         <ul>
-          {
-              this.state.playlist.map(
+          { this.state.playlist.map(
               track => {
                 return (
                   <Song track={track}></Song>
