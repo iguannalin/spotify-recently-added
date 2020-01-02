@@ -23,9 +23,10 @@ class Home extends Component {
 
     getCode() {
         const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
         this.setState({
-            code: urlParams.get('code'),
-            submitted: true
+            code: code,
+            submitted: !!(code)
         });
     }
 
