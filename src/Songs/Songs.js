@@ -104,9 +104,9 @@ class Songs extends Component {
                 <a href={authLink}>LINK</a>
                 <ul>
                     {this.state.playlist.map(
-                        track => {
+                        (track, index)=> {
                             return (
-                                <Song track={track}></Song>
+                                <li key={index}><Song track={track}></Song></li>
                             )
                         }
                     )
