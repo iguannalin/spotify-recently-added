@@ -13,8 +13,8 @@ class Song extends Component {
                 </div>
                 <div className="trackArtist">
                     {
-                        this.props.track.artists.map(artist => {
-                            return (<a href={artist.link}>{artist.name}</a>);
+                        this.props.track.artists.map((artist, index) => {
+                            return (<a href={artist.link} key={index}>{artist.name}</a>);
                         })
                     }
                 </div>
