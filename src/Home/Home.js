@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Songs from '../Songs/Songs';
+import Playlist from '../Playlist/Playlist';
 
 class Home extends Component {
     constructor(props) {
@@ -55,13 +55,13 @@ class Home extends Component {
         if (this.state.mid && this.state.ms && this.state.submitted) {
             return (
                 <div className="Home">
-                    <Songs mid={this.state.mid} ms={this.state.ms} code={this.state.code}/>
+                    <Playlist mid={this.state.mid} ms={this.state.ms} code={this.state.code}/>
                 </div>
             )
         } else {
             return (
-                <div className="project-form">
-                    <div className="project-form card">
+                <div className="login-form">
+                    <div className="login-form card">
                         <h2>To use this app, enter your client ID & secret here:</h2>
                         <form onSubmit={this.handleSubmit}>
                             <div>
@@ -72,7 +72,7 @@ class Home extends Component {
                                 <label>Secret:
                                     <input type="text" name="ms" onChange={this.handleUserInput}/></label>
                             </div>
-                            <div className="project-form buttons">
+                            <div className="login-form buttons">
                                 <input type="submit" value="Submit"/>
                             </div>
                         </form>
