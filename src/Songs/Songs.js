@@ -23,7 +23,6 @@ class Songs extends Component {
 
     getToken(ac) {
         const encodedBody = window.btoa(this.props.mid + ':' + this.props.ms);
-        console.log('CODE', ac);
 
         fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
@@ -46,7 +45,6 @@ class Songs extends Component {
     }
 
     getLibrary(at) {
-        console.log('TOKEN', at);
         fetch('https://api.spotify.com/v1/me/tracks?limit=20', {
             'Access-Control-Allow-Headers': {
                 'mode': 'no-cors',
@@ -60,7 +58,7 @@ class Songs extends Component {
                 if (r.ok) {
                     return r.json();
                 } else {
-                    console.log('Error: getLibrary');
+                    console.error('Error: getLibrary');
                 }
             })
             .then(data => {
@@ -97,7 +95,6 @@ class Songs extends Component {
 
     render() {
         const authLink = this.generateAuthLink();
-        console.log('LINK ', authLink);
         return (
             <div className="Playlist">
                 {this.state.playlist.length > 0 ? (<span/>): (<a href={authLink}>Click on me authorize Spotify</a>)}

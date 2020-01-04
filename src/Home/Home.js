@@ -31,7 +31,6 @@ class Home extends Component {
     }
 
     handleSubmit(e) {
-        console.log('SUBMITTED');
         if (e) {
             e.preventDefault();
         }
