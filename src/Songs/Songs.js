@@ -61,7 +61,6 @@ class Songs extends Component {
                     return r.json();
                 } else {
                     console.log('Error: getLibrary');
-                    return;
                 }
             })
             .then(data => {
@@ -101,10 +100,10 @@ class Songs extends Component {
         console.log('LINK ', authLink);
         return (
             <div className="Playlist">
-                <a href={authLink}>LINK</a>
+                {this.state.playlist.length > 0 ? (<span/>): (<a href={authLink}>Click on me authorize Spotify</a>)}
                 <ul>
-                    {this.state.playlist.map(
-                        (track, index)=> {
+                     {this.state.playlist.map(
+                        (track, index) => {
                             return (
                                 <li key={index}><Song track={track}></Song></li>
                             )
