@@ -9,24 +9,41 @@ class Playlist extends Component {
         this.state = {
             playlist: [],
             ruri: 'https://iguannalin.github.io/spotify-recently-added/',
+            userID: '',
+            at: '',
             endpoints: {
-                authorize: 'https://accounts.spotify.com/authorize'
+                authorize: 'https://accounts.spotify.com/authorize',
+                token: 'https://accounts.spotify.com/api/token',
+                users: 'https://api.spotify.com/v1/'
+            },
+            links: {
+                authLink: ''
             }
-        }
+        };
+        this.getLibrary = this.getLibrary.bind(this);
+        this.getUserID = this.getUserID.bind(this);
+        this.generateAuthLink = this.generateAuthLink.bind(this);
     };
 
-    generateAuthLink() {
-        return this.state.endpoints.authorize + '?client_id=' + this.props.mid + '&response_type=code&redirect_uri=' + this.state.ruri + '&scope=user-library-read';
+    componentDidMount() {
+        this.generateAuthLink();
+        this.getToken(this.props.code);
     }
 
-    componentDidMount() {
-        this.getToken(this.props.code);
+    generateAuthLink() {
+        const scopes = encodeURIComponent('user-library-read playlist-modify-private');
+        this.setState({
+            links: {
+                authLink: (this.state.endpoints.authorize + '?client_id=' + this.props.mid + '&response_type=code&redirect_uri=' + this.state.ruri + '&scope=' + scopes)
+            }
+        });
     }
 
     getToken(ac) {
         const encodedBody = window.btoa(this.props.mid + ':' + this.props.ms);
 
-        fetch('https://accounts.spotify.com/api/token', {
+
+        fetch(this.state.endpoints.token, {
             method: 'POST',
             'Access-Control-Allow-Headers': {
                 'mode': 'no-cors',
@@ -41,23 +58,29 @@ class Playlist extends Component {
             .then(r => {
                 if (r.ok) return r.json();
                 else {
-                    console.error('Code invalid');
+                    console.error('Error: getToken');
                     sessionStorage.removeItem('mcode');
                 }
             })
             .then(data => {
-                if (data && data.access_token) this.getLibrary(data.access_token)
+                if (data && data.access_token) {
+                    this.setState({
+                        at: data.access_token
+                    });
+                    this.getLibrary();
+                }
             });
     }
 
-    getLibrary(at) {
+    getLibrary() {
+
         fetch('https://api.spotify.com/v1/me/tracks?limit=20', {
             'Access-Control-Allow-Headers': {
                 'mode': 'no-cors',
                 'access-control-allow-origin': '*'
             },
             headers: {
-                'Authorization': `Bearer ${at}`
+                'Authorization': `Bearer ${this.state.at}`
             }
         })
             .then(r => {
@@ -69,7 +92,84 @@ class Playlist extends Component {
             })
             .then(data => {
                 if (data) this.compileList(data);
+            })
+            .then(() => {
+                this.getUserID();
             });
+    }
+
+    compileList(tracks) {
+        this.setState(() => {
+            return {playlist: []}
+        });
+
+        if (tracks && tracks.items) {
+            tracks.items.forEach(object => {
+                    const item = object.track;
+                    const track = {
+                        name: item.name,
+                        link: item.external_urls.spotify,
+                        artists: item.artists.map(artist => {
+                            return {name: artist.name, link: artist.external_urls.spotify}
+                        }),
+                        uri: item.uri
+                    };
+                    const tempPlaylist = this.state.playlist;
+                    tempPlaylist.push(track);
+                    this.setState(() => {
+                        return {
+                            playlist: tempPlaylist
+                        }
+                    })
+                }
+            );
+        }
+    }
+
+    createPlaylist() {
+
+        fetch(this.state.endpoints.users + 'users/' + this.state.userID + '/playlists', {
+            method: 'POST',
+            'Access-Control-Allow-Headers': {
+                'mode': 'no-cors',
+                'access-control-allow-origin': '*'
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.state.at}`
+            }
+        })
+            .then(r => {
+                if (r.ok) return r.json();
+                else console.error('Error: createPlaylist');
+            })
+            .then(data => {
+                if (data) return;
+            });
+    }
+
+    getUserID() {
+
+        fetch((this.state.endpoints.users + 'me'), {
+            'Access-Control-Allow-Headers': {
+                'mode': 'no-cors',
+                'access-control-allow-origin': '*'
+            },
+            headers: {
+                'Authorization': `Bearer ${this.state.at}`
+            }
+        })
+            .then(r => {
+                if (r.ok) return r.json();
+                else console.error('Error: getUserID');
+            })
+            .then(data => {
+                    if (data) {
+                        this.setState({userID: data.id});
+
+                    }
+                }
+            );
     }
 
     compileList(tracks) {
@@ -104,9 +204,15 @@ class Playlist extends Component {
         const authLink = this.generateAuthLink();
         return (
             <div className="Playlist">
-                {this.state.playlist.length > 0 ? (<span/>) : (
-                    <div className="button-link"><a href={authLink}>Click on me to authorize Spotify</a>
-                    </div>)}
+                {this.state.playlist.length > 0 ? (
+                    <div className="button-div position-right">
+                        <button className="button-link" onClick={this.createPlaylist}>Create this playlist on Spotify
+                            for me
+                        </button>
+                    </div>) : (
+                    <div className="button-div"><a href={this.state.links.authLink}>Click on me to authorize Spotify</a>
+                    </div>
+                )}
                 <ul>
                     {this.state.playlist.map(
                         (track, index) => {
