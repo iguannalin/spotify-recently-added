@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import Song from '../Song/Song';
+import Track from '../Track/Track';
+import './Playlist.scss';
 
 class Playlist extends Component {
     constructor(props) {
@@ -101,9 +102,11 @@ class Playlist extends Component {
         const authLink = this.generateAuthLink();
         return (
             <div className="Playlist">
-                {this.state.playlist.length > 0 ? (<span/>): (<a href={authLink}>Click on me authorize Spotify</a>)}
+                {this.state.playlist.length > 0 ? (<span/>) : (
+                    <div className="button-link"><a href={authLink}>Click on me to authorize Spotify</a>
+                    </div>)}
                 <ul>
-                     {this.state.playlist.map(
+                    {this.state.playlist.map(
                         (track, index) => {
                             return (
                                 <li key={index}><Track track={track}/></li>
