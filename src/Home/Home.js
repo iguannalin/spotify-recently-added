@@ -12,12 +12,14 @@ class Home extends Component {
         };
 
         this.getCode = this.getCode.bind(this);
+        this.retrieve = this.retrieve.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUserInput = this.handleUserInput.bind(this);
     }
 
     componentDidMount() {
         this.getCode();
+        this.retrieve();
     }
 
 
@@ -28,6 +30,17 @@ class Home extends Component {
             code: code,
             submitted: !!(code)
         });
+        sessionStorage.setItem('mcode', code);
+    }
+
+    retrieve() {
+        // TODO: implement a reset sessionStorage, in case user wants to change ID
+        if (!this.state.mid && sessionStorage.getItem('mid')) {
+            this.setState({
+                mid: sessionStorage.getItem('mid'),
+                ms: sessionStorage.getItem('ms')
+            });
+        }
     }
 
     handleSubmit(e) {
@@ -43,16 +56,18 @@ class Home extends Component {
         if (event.target.name === 'mid') {
             this.setState({
                 mid: event.target.value
-            })
+            });
+            sessionStorage.setItem('mid', event.target.value);
         } else if (event.target.name === 'ms') {
             this.setState({
                 ms: event.target.value
-            })
+            });
+            sessionStorage.setItem('ms', event.target.value);
         }
     }
 
     render() {
-        if (this.state.mid && this.state.ms && this.state.submitted) {
+        if ((this.state.mid && this.state.ms) || (this.state.submitted || this.state.code)) {
             return (
                 <div className="Home">
                     <Playlist mid={this.state.mid} ms={this.state.ms} code={this.state.code}/>
