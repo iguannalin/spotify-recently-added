@@ -102,7 +102,7 @@ class Songs extends Component {
                      {this.state.playlist.map(
                         (track, index) => {
                             return (
-                                <li key={index}><Song track={track}></Song></li>
+                                <li key={index}><Song track={track}/></li>
                             )
                         }
                     )

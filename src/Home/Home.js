@@ -55,7 +55,7 @@ class Home extends Component {
         if (this.state.mid && this.state.ms && this.state.submitted) {
             return (
                 <div className="Home">
-                    <Songs mid={this.state.mid} ms={this.state.ms} code={this.state.code}></Songs>
+                    <Songs mid={this.state.mid} ms={this.state.ms} code={this.state.code}/>
                 </div>
             )
         } else {
