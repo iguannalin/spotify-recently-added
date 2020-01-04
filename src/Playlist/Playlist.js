@@ -85,7 +85,8 @@ class Playlist extends Component {
                         link: item.external_urls.spotify,
                         artists: item.artists.map(artist => {
                             return {name: artist.name, link: artist.external_urls.spotify}
-                        })
+                        }),
+                        uri: item.uri
                     };
                     const tempPlaylist = this.state.playlist;
                     tempPlaylist.push(track);
