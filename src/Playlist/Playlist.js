@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Song from '../Song/Song';
 
-class Songs extends Component {
+class Playlist extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -102,7 +102,7 @@ class Songs extends Component {
                      {this.state.playlist.map(
                         (track, index) => {
                             return (
-                                <li key={index}><Song track={track}/></li>
+                                <li key={index}><Track track={track}/></li>
                             )
                         }
                     )
@@ -113,4 +113,4 @@ class Songs extends Component {
     }
 }
 
-export default Songs;
+export default Playlist;
