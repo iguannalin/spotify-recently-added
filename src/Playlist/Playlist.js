@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Track from '../Track/Track';
 import './Playlist.scss';
 
+// TODO Generate a playlist for user, and add custom playlist cover
 class Playlist extends Component {
     constructor(props) {
         super(props);
