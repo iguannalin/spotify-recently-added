@@ -1,0 +1,21 @@
+.Playlist {
+  margin-top: 50%;
+}
+
+.button-link {
+  align-items: center;
+  display: flex;
+  background-color: white;
+  height: 50px;
+  border-radius: 5px;
+  box-shadow: 10px 12px rgba(25, 25, 240, 0.5);
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.button-link:hover {
+  font-weight: bold;
+  box-shadow: 2px 2px rgba(25, 25, 240, 0.7);
+  transform: translate(11px, 9px);
+  border: 2px solid black;
+}
