@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/spotify-recently-added/static/css/main.494dda27.chunk.css",
-    "main.js": "/spotify-recently-added/static/js/main.b1abf0ad.chunk.js",
-    "main.js.map": "/spotify-recently-added/static/js/main.b1abf0ad.chunk.js.map",
-    "runtime-main.js": "/spotify-recently-added/static/js/runtime-main.c22fb8ad.js",
-    "runtime-main.js.map": "/spotify-recently-added/static/js/runtime-main.c22fb8ad.js.map",
-    "static/js/2.11911ef9.chunk.js": "/spotify-recently-added/static/js/2.11911ef9.chunk.js",
-    "static/js/2.11911ef9.chunk.js.map": "/spotify-recently-added/static/js/2.11911ef9.chunk.js.map",
+    "main.css": "/spotify-recently-added/static/css/main.6c779654.chunk.css",
+    "main.js": "/spotify-recently-added/static/js/main.e562f5e6.chunk.js",
+    "main.js.map": "/spotify-recently-added/static/js/main.e562f5e6.chunk.js.map",
+    "runtime-main.js": "/spotify-recently-added/static/js/runtime-main.ede6e71b.js",
+    "runtime-main.js.map": "/spotify-recently-added/static/js/runtime-main.ede6e71b.js.map",
+    "static/js/2.08f2a06d.chunk.js": "/spotify-recently-added/static/js/2.08f2a06d.chunk.js",
+    "static/js/2.08f2a06d.chunk.js.map": "/spotify-recently-added/static/js/2.08f2a06d.chunk.js.map",
     "index.html": "/spotify-recently-added/index.html",
-    "precache-manifest.dff4f2ab3eb27f34eb900938d87a0f22.js": "/spotify-recently-added/precache-manifest.dff4f2ab3eb27f34eb900938d87a0f22.js",
+    "precache-manifest.bba40ffff0b734d60b4eaaf61f64ec63.js": "/spotify-recently-added/precache-manifest.bba40ffff0b734d60b4eaaf61f64ec63.js",
     "service-worker.js": "/spotify-recently-added/service-worker.js",
-    "static/css/main.494dda27.chunk.css.map": "/spotify-recently-added/static/css/main.494dda27.chunk.css.map",
-    "static/js/2.11911ef9.chunk.js.LICENSE": "/spotify-recently-added/static/js/2.11911ef9.chunk.js.LICENSE"
+    "static/css/main.6c779654.chunk.css.map": "/spotify-recently-added/static/css/main.6c779654.chunk.css.map",
+    "static/js/2.08f2a06d.chunk.js.LICENSE": "/spotify-recently-added/static/js/2.08f2a06d.chunk.js.LICENSE"
   },
   "entrypoints": [
-    "static/js/runtime-main.c22fb8ad.js",
-    "static/js/2.11911ef9.chunk.js",
-    "static/css/main.494dda27.chunk.css",
-    "static/js/main.b1abf0ad.chunk.js"
+    "static/js/runtime-main.ede6e71b.js",
+    "static/js/2.08f2a06d.chunk.js",
+    "static/css/main.6c779654.chunk.css",
+    "static/js/main.e562f5e6.chunk.js"
   ]
 }
