@@ -37,7 +37,11 @@ class Playlist extends Component {
             body: `grant_type=authorization_code&code=${ac}&redirect_uri=${this.state.ruri}`,
         })
             .then(r => {
-                if (r.ok) return r.json()
+                if (r.ok) return r.json();
+                else {
+                    console.error('Code invalid');
+                    sessionStorage.removeItem('mcode');
+                }
             })
             .then(data => {
                 if (data && data.access_token) this.getLibrary(data.access_token)
