@@ -1,0 +1,39 @@
+.Track {
+  position: relative;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.track-image-small, .track-image-small img {
+  width: 250px;
+  height: 250px;
+}
+
+.Track:hover .track-details {
+  background-color: #808080a6;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  visibility: visible;
+}
+
+.track-details {
+  padding: 10%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  visibility: hidden;
+}
+
+.track-title * {
+  font-size: 48px;
+  color: #ffffffc4 !important;
+}
+
+.track-artist * {
+  font-size: 24px;
+  color: #ffffffc4 !important;
+}

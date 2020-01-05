@@ -86,8 +86,6 @@ body {
 ul {
     padding-bottom: 5px;
     list-style: none;
-    line-height: 2;
-    text-indent: -1em;
 }
 
 span.bullet {
@@ -96,6 +94,7 @@ span.bullet {
 
 ul li {
     display: inline;
+    margin: 5px;
 }
 
 button, li, a, a:visited, a:active, .task:hover > button.hide, button.hide:hover {
