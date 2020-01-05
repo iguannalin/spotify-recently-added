@@ -169,7 +169,11 @@ class Playlist extends Component {
         })
             .then(r => {
                 if (r.ok) return r.json();
-                else console.error('Error: addTracksToPlaylist');
+                else {
+                    console.error('Error: addTracksToPlaylist');
+                    sessionStorage.removeItem('playlistSnapshot');
+                    this.createPlaylist();
+                }
             })
             .then(data => {
                 if (data) sessionStorage.setItem('playlistSnapshot', data.snapshot_id)
@@ -198,6 +202,7 @@ class Playlist extends Component {
                 }
             );
     }
+
 
     render() {
         return (
