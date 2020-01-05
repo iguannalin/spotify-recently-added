@@ -112,23 +112,52 @@ class Playlist extends Component {
                         artists: item.artists.map(artist => {
                             return {name: artist.name, link: artist.external_urls.spotify}
                         }),
-                        uri: item.uri
                     };
                     const tempPlaylist = this.state.playlist;
+                    const tempPlaylistURI = this.state.playlistURI;
                     tempPlaylist.push(track);
-                    this.setState(() => {
-                        return {
-                            playlist: tempPlaylist
-                        }
+                    tempPlaylistURI.push(item.uri);
+                    this.setState({
+                        playlist: tempPlaylist,
+                        playlistURI: tempPlaylistURI
                     })
                 }
             );
         }
     }
 
+    // TODO look for existing 'Recently Added' playlist or delete previous one, to prevent from recreating one over and over again
     createPlaylist() {
+        const snapshotID = sessionStorage.getItem('playlistSnapshot');
 
-        fetch(this.state.endpoints.users + 'users/' + this.state.userID + '/playlists', {
+        if (snapshotID) {
+            this.addTracksToPlaylist(snapshotID);
+        } else {
+            fetch(this.state.endpoints.users + 'users/' + this.state.userID + '/playlists', {
+                method: 'POST',
+                'Access-Control-Allow-Headers': {
+                    'mode': 'no-cors',
+                    'access-control-allow-origin': '*'
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.at}`
+                },
+                body: `{"name":"Recently Added","public":false,"description":"Your top 20 recently added Spotify tracks :)"}`
+            })
+                .then(r => {
+                    if (r.ok) return r.json();
+                    else console.error('Error: createPlaylist');
+                })
+                .then(data => {
+                    if (data) this.addTracksToPlaylist(data.id);
+                });
+        }
+    }
+
+    addTracksToPlaylist(playlistID) {
+
+        fetch(this.state.endpoints.users + 'playlists/' + playlistID + '/tracks', {
             method: 'POST',
             'Access-Control-Allow-Headers': {
                 'mode': 'no-cors',
@@ -137,15 +166,15 @@ class Playlist extends Component {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${this.state.at}`
-            }
+            },
+            body: `{"uris":${JSON.stringify(this.state.playlistURI)}}`
         })
             .then(r => {
                 if (r.ok) return r.json();
-                else console.error('Error: createPlaylist');
+                else console.error('Error: addTracksToPlaylist');
             })
             .then(data => {
-                if (data) return;
-            });
+                if (data) sessionStorage.setItem('playlistSnapshot', data.snapshot_id)});
     }
 
     getUserID() {
