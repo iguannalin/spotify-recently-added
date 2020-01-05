@@ -45,7 +45,16 @@ class Playlist extends Component {
     }
 
     getToken(ac) {
-        if (!ac) return;
+        const refreshToken = sessionStorage.getItem('mtoken');
+        let grantType = 'authorization_code';
+        let codeType = 'code';
+        if (refreshToken && refreshToken !== "undefined") {
+            this.setState({at: refreshToken});
+            ac = refreshToken;
+            grantType = 'refresh_token';
+            codeType = 'refresh_token';
+        }
+
         const encodedBody = window.btoa(this.props.mid + ':' + this.props.ms);
         fetch(this.state.endpoints.token, {
             method: 'POST',
@@ -57,13 +66,13 @@ class Playlist extends Component {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': `Basic ${encodedBody}`
             },
-            body: `grant_type=authorization_code&code=${ac}&redirect_uri=${this.state.ruri}`,
+            body: `grant_type=${grantType}&${codeType}=${ac}&redirect_uri=${this.state.ruri}`,
         })
             .then(r => {
                 if (r.ok) return r.json();
                 else {
-                    console.error('Error: getToken');
                     sessionStorage.removeItem('mcode');
+                    console.error('Error: getToken');
                 }
             })
             .then(data => {
@@ -71,9 +80,11 @@ class Playlist extends Component {
                     this.setState({
                         at: data.access_token
                     });
+                    if (data.refresh_token) sessionStorage.setItem('mtoken', data.refresh_token);
                     this.getLibrary();
                 }
             });
+
     }
 
     getLibrary() {
@@ -87,10 +98,9 @@ class Playlist extends Component {
             }
         })
             .then(r => {
-                if (r.ok) {
-                    return r.json();
-                } else {
+                if (r.ok) return r.json(); else {
                     console.error('Error: getLibrary');
+                    sessionStorage.removeItem('mtoken');
                 }
             })
             .then(data => {
@@ -214,7 +224,8 @@ class Playlist extends Component {
                             </button>)
                         }
                     </div>) : (
-                    <div className="button-div"><a href={this.state.links.authLink}>Click on me to authorize Spotify</a>
+                    <div className="button-div"><a href={this.state.links.authLink}>Click on me to authorize
+                        Spotify</a>
                     </div>
                 )}
                 <ul>
