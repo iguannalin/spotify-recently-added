@@ -41,8 +41,6 @@ class Playlist extends Component {
 
     getToken(ac) {
         const encodedBody = window.btoa(this.props.mid + ':' + this.props.ms);
-
-
         fetch(this.state.endpoints.token, {
             method: 'POST',
             'Access-Control-Allow-Headers': {
@@ -73,7 +71,6 @@ class Playlist extends Component {
     }
 
     getLibrary() {
-
         fetch('https://api.spotify.com/v1/me/tracks?limit=20', {
             'Access-Control-Allow-Headers': {
                 'mode': 'no-cors',
@@ -102,7 +99,6 @@ class Playlist extends Component {
         this.setState(() => {
             return {playlist: []}
         });
-
         if (tracks && tracks.items) {
             tracks.items.forEach(object => {
                     const item = object.track;
@@ -174,11 +170,11 @@ class Playlist extends Component {
                 else console.error('Error: addTracksToPlaylist');
             })
             .then(data => {
-                if (data) sessionStorage.setItem('playlistSnapshot', data.snapshot_id)});
+                if (data) sessionStorage.setItem('playlistSnapshot', data.snapshot_id)
+            });
     }
 
     getUserID() {
-
         fetch((this.state.endpoints.users + 'me'), {
             'Access-Control-Allow-Headers': {
                 'mode': 'no-cors',
@@ -230,7 +226,6 @@ class Playlist extends Component {
     }
 
     render() {
-        const authLink = this.generateAuthLink();
         return (
             <div className="Playlist">
                 {this.state.playlist.length > 0 ? (
