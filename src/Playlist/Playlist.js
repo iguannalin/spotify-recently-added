@@ -197,34 +197,6 @@ class Playlist extends Component {
             );
     }
 
-    compileList(tracks) {
-        this.setState(() => {
-            return {playlist: []}
-        });
-
-        if (tracks && tracks.items) {
-            tracks.items.forEach(object => {
-                    const item = object.track;
-                    const track = {
-                        name: item.name,
-                        link: item.external_urls.spotify,
-                        artists: item.artists.map(artist => {
-                            return {name: artist.name, link: artist.external_urls.spotify}
-                        }),
-                        uri: item.uri
-                    };
-                    const tempPlaylist = this.state.playlist;
-                    tempPlaylist.push(track);
-                    this.setState(() => {
-                        return {
-                            playlist: tempPlaylist
-                        }
-                    })
-                }
-            );
-        }
-    }
-
     render() {
         return (
             <div className="Playlist">
