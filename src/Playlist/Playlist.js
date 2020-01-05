@@ -113,6 +113,7 @@ class Playlist extends Component {
                         artists: item.artists.map(artist => {
                             return {name: artist.name, link: artist.external_urls.spotify}
                         }),
+                        albumArt: item.album.images
                     };
                     const tempPlaylist = this.state.playlist;
                     const tempPlaylistURI = this.state.playlistURI;
