@@ -12,6 +12,7 @@ class Playlist extends Component {
             ruri: 'https://iguannalin.github.io/spotify-recently-added/',
             userID: '',
             at: '',
+            playlistCreated: false,
             endpoints: {
                 authorize: 'https://accounts.spotify.com/authorize',
                 token: 'https://accounts.spotify.com/api/token',
@@ -24,6 +25,8 @@ class Playlist extends Component {
         this.getLibrary = this.getLibrary.bind(this);
         this.getUserID = this.getUserID.bind(this);
         this.generateAuthLink = this.generateAuthLink.bind(this);
+        this.addTracksToPlaylist = this.addTracksToPlaylist.bind(this);
+        this.createPlaylist = this.createPlaylist.bind(this);
     };
 
     componentDidMount() {
@@ -165,16 +168,15 @@ class Playlist extends Component {
             },
             body: `{"uris":${JSON.stringify(this.state.playlistURI)}}`
         })
-            .then(r => {
-                if (r.ok) return r.json();
-                else {
-                    console.error('Error: addTracksToPlaylist');
+            .then(r => r.json())
+            .then(data => {
+                if (data.error.status >= 400 && data.error.emssage === 'Invalid playlist Id') {
                     sessionStorage.removeItem('playlistSnapshot');
                     this.createPlaylist();
+                } else if (data) {
+                    sessionStorage.setItem('playlistSnapshot', data.snapshot_id);
+                    this.setState({playlistCreated: true})
                 }
-            })
-            .then(data => {
-                if (data) sessionStorage.setItem('playlistSnapshot', data.snapshot_id)
             });
     }
 
@@ -206,9 +208,11 @@ class Playlist extends Component {
             <div className="Playlist">
                 {this.state.playlist.length > 0 ? (
                     <div className="button-div position-right">
-                        <button className="button-link" onClick={this.createPlaylist()}>Create this playlist on Spotify
-                            for me
-                        </button>
+                        {this.state.playlistCreated ? (<p className="button-link">Done!</p>) :
+                            (<button className="button-link" onClick={this.createPlaylist}>Create this playlist on
+                                Spotify for me
+                            </button>)
+                        }
                     </div>) : (
                     <div className="button-div"><a href={this.state.links.authLink}>Click on me to authorize Spotify</a>
                     </div>
