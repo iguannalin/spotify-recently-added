@@ -217,13 +217,13 @@ class Playlist extends Component {
         return (
             <div className="Playlist">
                 {this.state.playlist.length > 0 ? (
-                    <div className="button-div position-right">
+                    <span className="button-div position-right">
                         {this.state.playlistCreated ? (<p className="button-link">Done!</p>) :
                             (<button className="button-link" onClick={this.createPlaylist}>Create this playlist on
                                 Spotify for me
                             </button>)
                         }
-                    </div>) : (
+                    </span>) : (
                     <div className="button-div"><a href={this.state.links.authLink}>Click on me to authorize
                         Spotify</a>
                     </div>
