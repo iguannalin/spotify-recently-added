@@ -40,6 +40,8 @@ class Playlist extends Component {
     }
 
     getToken(ac) {
+        if (!ac) return;
+
         const encodedBody = window.btoa(this.props.mid + ':' + this.props.ms);
         fetch(this.state.endpoints.token, {
             method: 'POST',
