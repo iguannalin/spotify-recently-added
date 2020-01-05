@@ -127,7 +127,6 @@ class Playlist extends Component {
         }
     }
 
-    // TODO look for existing 'Recently Added' playlist or delete previous one, to prevent from recreating one over and over again
     createPlaylist() {
         const snapshotID = sessionStorage.getItem('playlistSnapshot');
         if (snapshotID) {
