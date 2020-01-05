@@ -6,7 +6,8 @@ class Track extends Component {
         return (
             <div className="Track">
                 <div className="track-image-small">
-                    <img alt={'Album cover of ' + this.props.track.name + ' by ' + this.props.track.artists[0].name} src={this.props.track.albumArt[1].url}/>
+                    <img alt={'Album cover of ' + this.props.track.name + ' by ' + this.props.track.artists[0].name}
+                         src={this.props.track.albumArt[1].url}/>
                 </div>
                 <div className="track-details">
                     <div className="track-title">
@@ -15,7 +16,9 @@ class Track extends Component {
                     <div className="track-artist">
                         {
                             this.props.track.artists.map((artist, index) => {
-                                return (<a href={artist.link} key={index}>{artist.name}</a>);
+                                return (<a href={artist.link} key={index}>
+                                    { index > 0 ? (', ') : ('') } {artist.name}
+                                </a>);
                             })
                         }
                     </div>
