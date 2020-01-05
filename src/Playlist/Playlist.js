@@ -23,6 +23,7 @@ class Playlist extends Component {
             }
         };
         this.getLibrary = this.getLibrary.bind(this);
+        this.getToken = this.getToken.bind(this);
         this.getUserID = this.getUserID.bind(this);
         this.generateAuthLink = this.generateAuthLink.bind(this);
         this.addTracksToPlaylist = this.addTracksToPlaylist.bind(this);
@@ -201,7 +202,6 @@ class Playlist extends Component {
                 }
             );
     }
-
 
     render() {
         return (
