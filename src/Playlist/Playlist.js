@@ -181,7 +181,7 @@ class Playlist extends Component {
         })
             .then(r => r.json())
             .then(data => {
-                if (data.error.status >= 400 && data.error.message === 'Invalid playlist Id') {
+                if (data.error && data.error.status >= 400 && data.error.message === 'Invalid playlist Id') {
                     sessionStorage.removeItem('playlistSnapshot');
                     this.createPlaylist();
                 } else if (data) {
