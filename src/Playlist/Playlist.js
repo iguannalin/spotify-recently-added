@@ -8,7 +8,8 @@ class Playlist extends Component {
         super(props);
         this.state = {
             playlist: [],
-            ruri: 'https://iguannalin.github.io/spotify-recently-added/',
+            playlistURI: [],
+            ruri: 'http://localhost:3000/',
             userID: '',
             at: '',
             endpoints: {
@@ -41,8 +42,8 @@ class Playlist extends Component {
 
     getToken(ac) {
         if (!ac) return;
-
         const encodedBody = window.btoa(this.props.mid + ':' + this.props.ms);
+        console.log('CODE', ac);
         fetch(this.state.endpoints.token, {
             method: 'POST',
             'Access-Control-Allow-Headers': {
@@ -73,6 +74,7 @@ class Playlist extends Component {
     }
 
     getLibrary() {
+        console.log('TOKEN', this.state.at);
         fetch('https://api.spotify.com/v1/me/tracks?limit=20', {
             'Access-Control-Allow-Headers': {
                 'mode': 'no-cors',
@@ -127,7 +129,7 @@ class Playlist extends Component {
     // TODO look for existing 'Recently Added' playlist or delete previous one, to prevent from recreating one over and over again
     createPlaylist() {
         const snapshotID = sessionStorage.getItem('playlistSnapshot');
-
+        console.log('MEOW');
         if (snapshotID) {
             this.addTracksToPlaylist(snapshotID);
         } else {
@@ -154,7 +156,7 @@ class Playlist extends Component {
     }
 
     addTracksToPlaylist(playlistID) {
-
+        console.log('addtracksto', playlistID);
         fetch(this.state.endpoints.users + 'playlists/' + playlistID + '/tracks', {
             method: 'POST',
             'Access-Control-Allow-Headers': {
@@ -181,6 +183,7 @@ class Playlist extends Component {
     }
 
     getUserID() {
+        console.log('AT', this.state.at);
         fetch((this.state.endpoints.users + 'me'), {
             'Access-Control-Allow-Headers': {
                 'mode': 'no-cors',
@@ -197,7 +200,7 @@ class Playlist extends Component {
             .then(data => {
                     if (data) {
                         this.setState({userID: data.id});
-
+                        console.log('USER ID', data);
                     }
                 }
             );
@@ -209,7 +212,7 @@ class Playlist extends Component {
             <div className="Playlist">
                 {this.state.playlist.length > 0 ? (
                     <div className="button-div position-right">
-                        <button className="button-link" onClick={this.createPlaylist}>Create this playlist on Spotify
+                        <button className="button-link" onClick={this.createPlaylist()}>Create this playlist on Spotify
                             for me
                         </button>
                     </div>) : (
