@@ -7,6 +7,7 @@ class Playlist extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            code: '',
             playlist: [],
             playlistURI: [],
             ruri: 'https://iguannalin.github.io/spotify-recently-added/',
@@ -28,11 +29,22 @@ class Playlist extends Component {
         this.generateAuthLink = this.generateAuthLink.bind(this);
         this.addTracksToPlaylist = this.addTracksToPlaylist.bind(this);
         this.createPlaylist = this.createPlaylist.bind(this);
+        this.getCode = this.getCode.bind(this);
     };
 
     componentDidMount() {
         this.generateAuthLink();
-        this.getToken(this.props.code);
+        this.getToken(this.getCode());
+    }
+
+    getCode() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        this.setState({
+            code: code
+        });
+        sessionStorage.setItem('mcode', code);
+        return code;
     }
 
     generateAuthLink() {

@@ -11,26 +11,13 @@ class Home extends Component {
             submitted: false
         };
 
-        this.getCode = this.getCode.bind(this);
         this.retrieve = this.retrieve.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUserInput = this.handleUserInput.bind(this);
     }
 
     componentDidMount() {
-        this.getCode();
         this.retrieve();
-    }
-
-
-    getCode() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        this.setState({
-            code: code,
-            submitted: !!(code)
-        });
-        sessionStorage.setItem('mcode', code);
     }
 
     retrieve() {
