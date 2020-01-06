@@ -5,8 +5,8 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mid: '',
-            ms: '',
+            mid: '6dc15fdee3cc4723b9f2a422b7f35305',
+            ms: 'a577356d88d340828944780fc72e6749',
             code: '',
             submitted: false
         };
