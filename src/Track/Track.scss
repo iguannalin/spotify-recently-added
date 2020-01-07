@@ -11,26 +11,31 @@
   height: 250px;
 }
 
+.Track:hover .track-image-small img {
+  -webkit-filter: brightness(75%) contrast(50%) sepia(10%); /* Safari 6.0 - 9.0 */
+  filter: brightness(75%) contrast(50%) sepia(10%);
+}
+
 .Track:hover .track-details {
-  background-color: #808080a6;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
   visibility: visible;
 }
 
 .track-details {
-  padding: 10%;
   box-sizing: border-box;
   position: absolute;
-  top: 0;
   visibility: hidden;
+  display: flex;
+  justify-content: center;
+  flex-flow: column wrap;
+  align-items: center;
+  width: 100%;
+  word-wrap: break-word;
+  text-align: center;
+  z-index: 99999;
 }
 
 .track-title * {
   font-size: 36px;
-  overflow-wrap: anywhere;
   color: #ffffffc4 !important;
 }
 

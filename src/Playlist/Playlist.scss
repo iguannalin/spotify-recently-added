@@ -1,5 +1,12 @@
 .Playlist {
-  margin-top: 50%;
+  width: 100vw;
+  //display: flex;
+}
+
+.playlist-container {
+  //display: flex;
+  //top: 40%;
+  //position: absolute;
 }
 
 .button-div {
@@ -29,6 +36,7 @@
 
 .position-right {
   position: fixed;
+  top: 10%;
   right: 10%;
 }
 
