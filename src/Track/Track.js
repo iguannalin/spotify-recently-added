@@ -4,16 +4,16 @@ import './Track.scss';
 class Track extends Component {
     render() {
         return (
-            <div className="Track">
-                <div className="track-image-small">
+            <span className="Track">
+                <span className="track-image-small">
                     <img alt={'Album cover of ' + this.props.track.name + ' by ' + this.props.track.artists[0].name}
                          src={this.props.track.albumArt[1].url}/>
-                </div>
-                <div className="track-details">
-                    <div className="track-title">
+                </span>
+                <span className="track-details">
+                    <h2 className="track-title">
                         <a href={this.props.track.link}>{this.props.track.name}</a>
-                    </div>
-                    <div className="track-artist">
+                    </h2>
+                    <p className="track-artist">
                         {
                             this.props.track.artists.map((artist, index) => {
                                 return (<a href={artist.link} key={index}>
@@ -21,9 +21,9 @@ class Track extends Component {
                                 </a>);
                             })
                         }
-                    </div>
-                </div>
-            </div>
+                    </p>
+                </span>
+            </span>
         );
     }
 }
