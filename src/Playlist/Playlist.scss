@@ -1,6 +1,8 @@
 .Playlist {
   width: 100vw;
-  //display: flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .playlist-container {
@@ -10,6 +12,7 @@
 }
 
 .button-div {
+  width: max-content;
   text-align: center;
   display: flex;
   align-items: center;
@@ -20,6 +23,10 @@
   box-shadow: 10px 12px rgba(25, 25, 240, 0.5);
   padding: 10px;
   border: 1px solid black;
+}
+
+.margin-top {
+  margin-top: 10%;
 }
 
 .button-div:hover {

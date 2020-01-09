@@ -21,16 +21,13 @@
 }
 
 .track-details {
+  padding: 5%;
+  overflow-y: scroll;
+  display: block;
+  height: 100%;
   box-sizing: border-box;
   position: absolute;
   visibility: hidden;
-  display: flex;
-  justify-content: center;
-  flex-flow: column wrap;
-  align-items: center;
-  width: 100%;
-  word-wrap: break-word;
-  text-align: center;
   z-index: 99999;
 }
 

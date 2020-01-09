@@ -246,7 +246,7 @@ class Playlist extends Component {
                             </button>)
                         }
                     </div>) : (
-                    <div className="button-div"><a href={this.state.links.authLink}>Click on me to authorize
+                    <div className="button-div margin-top"><a href={this.state.links.authLink}>Click on me to authorize
                         Spotify</a>
                     </div>
                 )}
