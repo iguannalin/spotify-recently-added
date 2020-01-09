@@ -1,14 +1,27 @@
 .Playlist {
   width: 100vw;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
 .playlist-container {
-  //display: flex;
-  //top: 40%;
-  //position: absolute;
+  width: 75vw;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.playlist-container li {
+  margin: 2%;
+  padding: 2%;
+  transition: transform 1s ease-in-out;
+  transform: skew(-2deg, -2deg);
+  border: 2px solid purple;
+}
+
+.playlist-container li:hover {
+  transform: skew(1deg, 1deg);
 }
 
 .button-div {
@@ -44,7 +57,7 @@
 .position-right {
   position: fixed;
   top: 10%;
-  right: 10%;
+  right: 7%;
 }
 
 .button-link {
