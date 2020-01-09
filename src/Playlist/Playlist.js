@@ -266,18 +266,19 @@ class Playlist extends Component {
 
     render() {
         return (
-            <div className="Playlist">
-                <ul className="playlist-container" aria-label="Here is a list of your 20 most recently added tracks:">
-                    {this.state.playlist.map(
-                        (track, index) => {
-                            return (
-                                <li key={index}><Track track={track}/></li>
-                            )
-                        }
-                    )
-                    }
-                </ul>
+            <div className={this.state.playlist.length > 0 ? 'Playlist' : 'Playlist center-display'}>
                 {this.state.playlist.length > 0 ? (
+                    <span>
+                        <ul className="playlist-container"
+                            aria-label="Here is a list of your 20 most recently added tracks:">
+                                {this.state.playlist.map(
+                                    (track, index) => {
+                                        return (
+                                            <li key={index}><Track track={track}/></li>
+                                        )
+                                    }
+                                )}
+                        </ul>
                     <div className="button-div position-right">
                         {this.state.playlistCreated ? (
                                 <p className="button-link" onClick={this.createConfetti}>Done!<span
@@ -286,7 +287,8 @@ class Playlist extends Component {
                                 Spotify for me
                             </button>)
                         }
-                    </div>) : (
+                    </div>
+                    </span>) : (
                     <div className="button-div margin-top"><a href={this.state.links.authLink}>Click on me to authorize
                         Spotify</a>
                     </div>
