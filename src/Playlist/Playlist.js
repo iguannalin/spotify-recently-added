@@ -29,6 +29,7 @@ class Playlist extends Component {
         this.generateAuthLink = this.generateAuthLink.bind(this);
         this.addTracksToPlaylist = this.addTracksToPlaylist.bind(this);
         this.createPlaylist = this.createPlaylist.bind(this);
+        this.createConfetti = this.createConfetti.bind(this);
         this.getCode = this.getCode.bind(this);
     };
 
@@ -225,6 +226,44 @@ class Playlist extends Component {
             );
     }
 
+    getCircleX(deg, radius) {
+        const radians = deg * (Math.PI / 180);
+        return Math.sin(radians) * radius;
+    }
+
+    getCircleY(deg, radius) {
+        const radians = deg * (Math.PI / 180);
+        return Math.cos(radians) * radius;
+    }
+
+    getColor(i) {
+        const colors = ['rgb(108, 220, 254)', 'rgb(55, 223, 159)', 'rgb(104, 74, 179)', 'rgb(245, 163, 199)', 'rgb(242, 107, 60)', 'rgb(241, 80, 98)', 'rgb(254, 253, 223)', 'rgb(105, 192, 123)',
+            'rgb(183, 124, 168)'];
+        const color = Math.round(i) % (colors.length);
+        return (colors[color]);
+    }
+
+    createConfetti() {
+        const container = document.getElementById('confetti-container');
+        container.innerHTML = '';
+        for (let i = 1; i <= 360; i += 30) {
+            const elem = document.createElement('span');
+            const r = (Math.random() * 7) + 5;
+            const radius = 100;
+            const x = Math.round(this.getCircleY(i, radius)).toString() + 'px';
+            const y = Math.round(this.getCircleX(i, radius)).toString() + 'px';
+            const coord = 'translate(' + x.toString() + ',' + y.toString() + ')';
+            elem.style.webkitTransform = coord;
+            elem.style.width = r.toString() + 'px';
+            elem.style.height = r.toString() + 'px';
+            elem.classList.add('confetti');
+            elem.style.backgroundColor = this.getColor(i / 30);
+            elem.style.webkitTranslate = 'transform 5s linear ease-in-out';
+            container.appendChild(elem);
+        }
+        container.style.visibility = 'visible';
+    }
+
     render() {
         return (
             <div className="Playlist">
@@ -240,7 +279,9 @@ class Playlist extends Component {
                 </ul>
                 {this.state.playlist.length > 0 ? (
                     <div className="button-div position-right">
-                        {this.state.playlistCreated ? (<p className="button-link">Done!</p>) :
+                        {this.state.playlistCreated ? (
+                                <p className="button-link" onClick={this.createConfetti}>Done!<span
+                                    id="confetti-container"/></p>) :
                             (<button className="button-link" onClick={this.createPlaylist}>Create this playlist on
                                 Spotify for me
                             </button>)
