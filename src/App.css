@@ -26,10 +26,6 @@ body {
         background: linear-gradient(90deg, white 20px, transparent 1%) center, linear-gradient(white 20px, transparent 1%) center, palegoldenrod;
         background-size: 22px 22px;
     }
-
-    button.undo {
-        right: 10%;
-    }
 }
 
 @media only screen and (min-width: 780px) {
@@ -49,10 +45,6 @@ body {
         margin: 15px 20px;
         background: linear-gradient(90deg, white 20px, transparent 1%) center, linear-gradient(white 20px, transparent 1%) center, palegoldenrod;
         background-size: 22px 22px;
-    }
-
-    button.undo {
-        right: 60%;
     }
 }
 
@@ -88,16 +80,12 @@ ul {
     list-style: none;
 }
 
-span.bullet {
-    padding-right: 10px;
-}
-
 ul li {
     display: inline;
     margin: 5px;
 }
 
-button, li, a, a:visited, a:active, .task:hover > button.hide, button.hide:hover {
+button, li, a, a:visited, a:active {
     color: rgb(106, 103, 206);
     text-decoration: none;
 }
@@ -106,28 +94,6 @@ li:hover, a:hover {
     cursor: pointer;
     color: #a177ff;
     text-decoration: underline;
-}
-
-button.hide {
-    cursor: pointer;
-    font-size: 0.8em;
-    border: none;
-    color: #848f99;
-    background-color: initial;
-    transition: opacity 0.5s;
-    opacity: 0;
-}
-
-button.undo {
-    cursor: pointer;
-    font-size: 0.8em;
-    border: none;
-    color: #848f99;
-    background-color: initial;
-    opacity: 0;
-    position: absolute;
-    visibility: hidden;
-    animation: fadeOut 5s;
 }
 
 .task:hover > button.hide {
