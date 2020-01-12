@@ -266,7 +266,7 @@ class Playlist extends Component {
 
     render() {
         return (
-            <div className={this.state.playlist.length > 0 ? 'Playlist' : 'Playlist center-display'}>
+            <div className={this.state.playlist.length > 0 ? 'Playlist home' : 'Playlist center-display'}>
                 {this.state.playlist.length > 0 ? (
                     <h1 className="header playlist-h1">Here is a list of your 20 most recently added tracks:</h1>) : (
                     <h1 className="header">See your Spotify 20 Recently Added tracks, and make it into a

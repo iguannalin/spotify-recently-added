@@ -11,7 +11,6 @@ body {
 
 @media only screen and (max-width: 780px) {
     .App {
-        max-width: 90vw;
         display: flex;
         justify-content: center;
         flex-flow: column wrap;
@@ -25,6 +24,26 @@ body {
         margin: 10px 0;
         background: linear-gradient(90deg, white 20px, transparent 1%) center, linear-gradient(white 20px, transparent 1%) center, palegoldenrod;
         background-size: 22px 22px;
+    }
+
+    .home .button-div {
+        width: 25% !important;
+        padding: 20px !important;
+    }
+
+    .center-display .button-div {
+        width: max-content !important;
+    }
+
+    .position-mid-right {
+        position: fixed;
+        top: 10% !important;
+        right: 7%;
+    }
+
+    .playlist-h1, h1.header {
+        margin-left: 0 !important;
+        font-size: 20px !important;
     }
 }
 
