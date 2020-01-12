@@ -57,6 +57,7 @@ class Home extends Component {
         if ((this.state.mid && this.state.ms) || (this.state.submitted || this.state.code)) {
             return (
                 <div className="Home">
+                    <h1 className="header">See your Spotify 20 Recently Added tracks, and make it into a playlist</h1>
                     <Playlist mid={this.state.mid} ms={this.state.ms} code={this.state.code}/>
                 </div>
             )
