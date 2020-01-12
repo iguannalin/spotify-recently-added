@@ -2,11 +2,18 @@
   width: 100vw;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
+  flex-flow: column wrap;
 }
 
 .center-display {
   justify-content: center;
+  align-items: center !important;
+  flex-flow: column;
+}
+
+.playlist-h1 {
+  margin-left: 5%;
 }
 
 .playlist-container {
@@ -58,9 +65,9 @@
   font-weight: bold;
 }
 
-.position-right {
+.position-mid-right {
   position: fixed;
-  top: 10%;
+  top: 40%;
   right: 7%;
 }
 

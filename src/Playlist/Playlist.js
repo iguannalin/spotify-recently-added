@@ -268,9 +268,12 @@ class Playlist extends Component {
         return (
             <div className={this.state.playlist.length > 0 ? 'Playlist' : 'Playlist center-display'}>
                 {this.state.playlist.length > 0 ? (
+                    <h1 className="header playlist-h1">Here is a list of your 20 most recently added tracks:</h1>) : (
+                    <h1 className="header">See your Spotify 20 Recently Added tracks, and make it into a
+                        playlist</h1>)}
+                {this.state.playlist.length > 0 ? (
                     <span>
-                        <ul className="playlist-container"
-                            aria-label="Here is a list of your 20 most recently added tracks:">
+                        <ul className="playlist-container">
                                 {this.state.playlist.map(
                                     (track, index) => {
                                         return (
@@ -279,19 +282,21 @@ class Playlist extends Component {
                                     }
                                 )}
                         </ul>
-                    <div className="button-div position-right">
-                        {this.state.playlistCreated ? (
-                                <p className="button-link" onClick={this.createConfetti}>Done!<span
-                                    id="confetti-container"/></p>) :
-                            (<button className="button-link" onClick={this.createPlaylist}>Create this playlist on
-                                Spotify for me
-                            </button>)
-                        }
-                    </div>
+                        <div className="button-div position-mid-right">
+                            {this.state.playlistCreated ? (
+                                    <p className="button-link" onClick={this.createConfetti}>Done!<span
+                                        id="confetti-container"/></p>) :
+                                (<button className="button-link" onClick={this.createPlaylist}>Create this playlist on
+                                    Spotify for me
+                                </button>)
+                            }
+                        </div>
                     </span>) : (
-                    <div className="button-div margin-top"><a href={this.state.links.authLink}>Click on me to authorize
-                        Spotify</a>
-                    </div>
+                    <span>
+                        <div className="button-div margin-top"><a href={this.state.links.authLink}>Click on me to authorize
+                            Spotify</a>
+                        </div>
+                    </span>
                 )}
             </div>
         );

@@ -48,12 +48,14 @@ body {
     }
 }
 
-.header, .projectTitle {
+.header {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-flow: column wrap;
     text-align: center;
+    margin-top: 5%;
+    color: midnightblue;
 }
 
 .logo {
