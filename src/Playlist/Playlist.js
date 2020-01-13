@@ -167,7 +167,7 @@ class Playlist extends Component {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.state.at}`
                 },
-                body: `{"name":"Recently Added","public":false,"description":"Your top 20 recently added Spotify tracks. Happy 2020! - Anna :)"}`
+                body: `{"name":"Recently Added","public":false,"description":"Sometimes you just want to listen to your newest obsessions. Happy 2020! - Anna :)"}`
             })
                 .then(r => {
                     if (r.ok) return r.json();
