@@ -108,7 +108,7 @@ class Playlist extends Component {
     }
 
     getLibrary() {
-        fetch('https://api.spotify.com/v1/me/tracks?limit=20', {
+        fetch('https://api.spotify.com/v1/me/tracks?limit=' + this.state.numberOfTracks.toString(), {
             'Access-Control-Allow-Headers': {
                 'mode': 'no-cors',
                 'access-control-allow-origin': '*'
@@ -282,7 +282,7 @@ class Playlist extends Component {
         this.state.numberOfTracks = e.target.value;
         sessionStorage.setItem('numTracks', e.target.value);
 
-        this.getLibrary();
+        if (this.state.at) this.getLibrary();
     }
 
     render() {
