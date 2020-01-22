@@ -101,3 +101,13 @@
   position: fixed;
   top: 0
 }
+
+.option-select > select, .header {
+  display: inline-block;
+}
+
+.option-select > select {
+  margin: 10px;
+  font-size: 25px;
+  padding: 7px;
+}

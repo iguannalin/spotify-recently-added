@@ -21,7 +21,9 @@ class Playlist extends Component {
             },
             links: {
                 authLink: ''
-            }
+            },
+            tracksSelectOptions: [],
+            numberOfTracks: 0
         };
         this.getLibrary = this.getLibrary.bind(this);
         this.getToken = this.getToken.bind(this);
@@ -31,11 +33,16 @@ class Playlist extends Component {
         this.createPlaylist = this.createPlaylist.bind(this);
         this.createConfetti = this.createConfetti.bind(this);
         this.getCode = this.getCode.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
     };
 
     componentDidMount() {
+        this.getOptions();
         this.generateAuthLink();
         this.getToken(this.getCode());
+        if (sessionStorage.getItem('numTracks')) {
+            this.state.numberOfTracks = sessionStorage.getItem('numTracks');
+        }
     }
 
     getCode() {
@@ -264,13 +271,43 @@ class Playlist extends Component {
         container.style.visibility = 'visible';
     }
 
+    getOptions() {
+        this.state.tracksSelectOptions = [];
+        for (let i = 2; i <= 100; i++) {
+            this.state.tracksSelectOptions.push(i);
+        }
+    }
+
+    handleSelect(e) {
+        this.state.numberOfTracks = e.target.value;
+        sessionStorage.setItem('numTracks', e.target.value);
+
+        this.getLibrary();
+    }
+
     render() {
         return (
             <div className={this.state.playlist.length > 0 ? 'Playlist home' : 'Playlist center-display'}>
                 {this.state.playlist.length > 0 ? (
-                    <h1 className="header playlist-h1">Here is a list of your 20 most recently added tracks:</h1>) : (
-                    <h1 className="header">See your Spotify 20 Recently Added tracks, and make it into a
-                        playlist</h1>)}
+                    <h1 className="header playlist-h1">Here is a list of your
+                        <span className="option-select">
+                            <select name="Select up to which recent tracks you would like to view"
+                                    onChange={this.handleSelect}>
+                                {this.state.tracksSelectOptions.map((i) => {
+                                    return (<option value={i} selected={i.toString() === this.state.numberOfTracks}>{i}</option>);
+                                })}
+                            </select>
+                        </span>
+                        most recently added tracks:</h1>) : (
+                    <h1 className="header">See your Spotify
+                        <span className="option-select">
+                            <select name="Select up to which recent tracks you would like to view"
+                                    onChange={this.handleSelect}>
+                                {this.state.tracksSelectOptions.map((i) => {
+                                    return (<option value={i} selected={i === 20}>{i}</option>);
+                                })}
+                            </select>
+                        </span>Recently Added tracks, and make it into a playlist</h1>)}
                 {this.state.playlist.length > 0 ? (
                     <span>
                         <ul className="playlist-container">
