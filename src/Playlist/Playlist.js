@@ -273,7 +273,7 @@ class Playlist extends Component {
 
     getOptions() {
         this.state.tracksSelectOptions = [];
-        for (let i = 2; i <= 100; i++) {
+        for (let i = 2; i <= 50; i++) {
             this.state.tracksSelectOptions.push(i);
         }
     }
