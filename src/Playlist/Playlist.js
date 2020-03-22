@@ -3,6 +3,7 @@ import Track from '../Track/Track';
 import './Playlist.scss';
 
 // TODO Generate a playlist for user, and add custom playlist cover
+// TODO Create a more dynamic title for playlist, i.e. using month name
 class Playlist extends Component {
     constructor(props) {
         super(props);

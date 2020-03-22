@@ -1,0 +1,27 @@
+Index: src/Track/Track.scss
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.Track {\n  position: relative;\n  display: flex;\n  flex-flow: column wrap;\n  justify-content: flex-start;\n  align-items: center;\n}\n\n.track-image-small, .track-image-small img {\n  width: 250px;\n  height: 250px;\n}\n\n.Track:hover .track-details {\n  background-color: #808080a6;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  visibility: visible;\n}\n\n.track-details {\n  padding: 10%;\n  box-sizing: border-box;\n  position: absolute;\n  top: 0;\n  visibility: hidden;\n}\n\n.track-title * {\n  font-size: 36px;\n  overflow-wrap: anywhere;\n  color: #ffffffc4 !important;\n}\n\n.track-artist * {\n  font-size: 24px;\n  color: #ffffffc4 !important;\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/Track/Track.scss	(revision e77855bc53e2007eff45973bc5e359c187b47cb0)
++++ src/Track/Track.scss	(date 1578347952000)
+@@ -4,6 +4,17 @@
+   flex-flow: column wrap;
+   justify-content: flex-start;
+   align-items: center;
++  animation: skew 3s infinite alternate-reverse;
++  transform: skew(20deg);
++}
++
++@keyframes skew {
++  0% {
++    transform: skew(0deg, 0deg);
++  }
++  100% {
++    transform: skew(-5deg, -5deg);
++  }
+ }
+ 
+ .track-image-small, .track-image-small img {

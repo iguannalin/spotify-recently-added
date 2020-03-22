@@ -1,0 +1,143 @@
+Index: src/Playlist/Playlist.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from 'react';\nimport Track from '../Track/Track';\nimport './Playlist.scss';\n\n// TODO Generate a playlist for user, and add custom playlist cover\nclass Playlist extends Component {\n    constructor(props) {\n        super(props);\n        this.state = {\n            code: '',\n            playlist: [],\n            playlistURI: [],\n            ruri: 'https://iguannalin.github.io/spotify-recently-added/',\n            userID: '',\n            at: '',\n            playlistCreated: false,\n            endpoints: {\n                authorize: 'https://accounts.spotify.com/authorize',\n                token: 'https://accounts.spotify.com/api/token',\n                users: 'https://api.spotify.com/v1/'\n            },\n            links: {\n                authLink: ''\n            },\n            tracksSelectOptions: [],\n            numberOfTracks: 0\n        };\n        this.getLibrary = this.getLibrary.bind(this);\n        this.getToken = this.getToken.bind(this);\n        this.getUserID = this.getUserID.bind(this);\n        this.generateAuthLink = this.generateAuthLink.bind(this);\n        this.addTracksToPlaylist = this.addTracksToPlaylist.bind(this);\n        this.createPlaylist = this.createPlaylist.bind(this);\n        this.createConfetti = this.createConfetti.bind(this);\n        this.getCode = this.getCode.bind(this);\n        this.handleSelect = this.handleSelect.bind(this);\n    };\n\n    componentDidMount() {\n        this.getOptions();\n        this.generateAuthLink();\n        this.getToken(this.getCode());\n        if (sessionStorage.getItem('numTracks')) {\n            this.state.numberOfTracks = sessionStorage.getItem('numTracks');\n        }\n    }\n\n    getCode() {\n        const urlParams = new URLSearchParams(window.location.search);\n        const code = urlParams.get('code');\n        this.setState({\n            code: code\n        });\n        sessionStorage.setItem('mcode', code);\n        return code;\n    }\n\n    generateAuthLink() {\n        const scopes = encodeURIComponent('user-library-read playlist-modify-private');\n        this.setState({\n            links: {\n                authLink: (this.state.endpoints.authorize + '?client_id=' + this.props.mid + '&response_type=code&redirect_uri=' + this.state.ruri + '&scope=' + scopes)\n            }\n        });\n    }\n\n    getToken(ac) {\n        const refreshToken = sessionStorage.getItem('mtoken');\n        let grantType = 'authorization_code';\n        let codeType = 'code';\n        if (refreshToken && refreshToken !== \"undefined\") {\n            this.setState({at: refreshToken});\n            ac = refreshToken;\n            grantType = 'refresh_token';\n            codeType = 'refresh_token';\n        }\n\n        const encodedBody = window.btoa(this.props.mid + ':' + this.props.ms);\n        fetch(this.state.endpoints.token, {\n            method: 'POST',\n            'Access-Control-Allow-Headers': {\n                'mode': 'no-cors',\n                'access-control-allow-origin': '*'\n            },\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded',\n                'Authorization': `Basic ${encodedBody}`\n            },\n            body: `grant_type=${grantType}&${codeType}=${ac}&redirect_uri=${this.state.ruri}`,\n        })\n            .then(r => {\n                if (r.ok) return r.json();\n                else {\n                    sessionStorage.removeItem('mcode');\n                    console.error('Error: getToken');\n                }\n            })\n            .then(data => {\n                if (data && data.access_token) {\n                    this.setState({\n                        at: data.access_token\n                    });\n                    if (data.refresh_token) sessionStorage.setItem('mtoken', data.refresh_token);\n                    this.getLibrary();\n                }\n            });\n\n    }\n\n    getLibrary() {\n        fetch('https://api.spotify.com/v1/me/tracks?limit=' + this.state.numberOfTracks.toString(), {\n            'Access-Control-Allow-Headers': {\n                'mode': 'no-cors',\n                'access-control-allow-origin': '*'\n            },\n            headers: {\n                'Authorization': `Bearer ${this.state.at}`\n            }\n        })\n            .then(r => {\n                if (r.ok) return r.json(); else {\n                    console.error('Error: getLibrary');\n                    sessionStorage.removeItem('mtoken');\n                }\n            })\n            .then(data => {\n                if (data) this.compileList(data);\n            })\n            .then(() => {\n                this.getUserID();\n            });\n    }\n\n    compileList(tracks) {\n        this.setState(() => {\n            return {playlist: []}\n        });\n        if (tracks && tracks.items) {\n            tracks.items.forEach(object => {\n                    const item = object.track;\n                    const track = {\n                        name: item.name,\n                        link: item.external_urls.spotify,\n                        artists: item.artists.map(artist => {\n                            return {name: artist.name, link: artist.external_urls.spotify}\n                        }),\n                        albumArt: item.album.images\n                    };\n                    const tempPlaylist = this.state.playlist;\n                    const tempPlaylistURI = this.state.playlistURI;\n                    tempPlaylist.push(track);\n                    tempPlaylistURI.push(item.uri);\n                    this.setState({\n                        playlist: tempPlaylist,\n                        playlistURI: tempPlaylistURI\n                    })\n                }\n            );\n        }\n    }\n\n    createPlaylist() {\n        const snapshotID = sessionStorage.getItem('playlistSnapshot');\n        if (snapshotID) {\n            this.addTracksToPlaylist(snapshotID);\n        } else {\n            fetch(this.state.endpoints.users + 'users/' + this.state.userID + '/playlists', {\n                method: 'POST',\n                'Access-Control-Allow-Headers': {\n                    'mode': 'no-cors',\n                    'access-control-allow-origin': '*'\n                },\n                headers: {\n                    'Content-Type': 'application/json',\n                    'Authorization': `Bearer ${this.state.at}`\n                },\n                body: `{\"name\":\"Recently Added\",\"public\":false,\"description\":\"Sometimes you just want to listen to your newest obsessions. Happy 2020! - Anna :)\"}`\n            })\n                .then(r => {\n                    if (r.ok) return r.json();\n                    else console.error('Error: createPlaylist');\n                })\n                .then(data => {\n                    if (data) this.addTracksToPlaylist(data.id);\n                });\n        }\n    }\n\n    addTracksToPlaylist(playlistID) {\n        fetch(this.state.endpoints.users + 'playlists/' + playlistID + '/tracks', {\n            method: 'POST',\n            'Access-Control-Allow-Headers': {\n                'mode': 'no-cors',\n                'access-control-allow-origin': '*'\n            },\n            headers: {\n                'Content-Type': 'application/json',\n                'Authorization': `Bearer ${this.state.at}`\n            },\n            body: `{\"uris\":${JSON.stringify(this.state.playlistURI)}}`\n        })\n            .then(r => r.json())\n            .then(data => {\n                if (data.error && data.error.status >= 400 && data.error.message === 'Invalid playlist Id') {\n                    sessionStorage.removeItem('playlistSnapshot');\n                    this.createPlaylist();\n                } else if (data) {\n                    sessionStorage.setItem('playlistSnapshot', data.snapshot_id);\n                    this.setState({playlistCreated: true})\n                }\n            });\n    }\n\n    getUserID() {\n        fetch((this.state.endpoints.users + 'me'), {\n            'Access-Control-Allow-Headers': {\n                'mode': 'no-cors',\n                'access-control-allow-origin': '*'\n            },\n            headers: {\n                'Authorization': `Bearer ${this.state.at}`\n            }\n        })\n            .then(r => {\n                if (r.ok) return r.json();\n                else console.error('Error: getUserID');\n            })\n            .then(data => {\n                    if (data) {\n                        this.setState({userID: data.id});\n                    }\n                }\n            );\n    }\n\n    getCircleX(deg, radius) {\n        const radians = deg * (Math.PI / 180);\n        return Math.sin(radians) * radius;\n    }\n\n    getCircleY(deg, radius) {\n        const radians = deg * (Math.PI / 180);\n        return Math.cos(radians) * radius;\n    }\n\n    getColor(i) {\n        const colors = ['rgb(108, 220, 254)', 'rgb(55, 223, 159)', 'rgb(104, 74, 179)', 'rgb(245, 163, 199)', 'rgb(242, 107, 60)', 'rgb(241, 80, 98)', 'rgb(254, 253, 223)', 'rgb(105, 192, 123)',\n            'rgb(183, 124, 168)'];\n        const color = Math.round(i) % (colors.length);\n        return (colors[color]);\n    }\n\n    createConfetti() {\n        const container = document.getElementById('confetti-container');\n        container.innerHTML = '';\n        for (let i = 1; i <= 360; i += 30) {\n            const elem = document.createElement('span');\n            const r = (Math.random() * 7) + 5;\n            const radius = 100;\n            const x = Math.round(this.getCircleY(i, radius)).toString() + 'px';\n            const y = Math.round(this.getCircleX(i, radius)).toString() + 'px';\n            const coord = 'translate(' + x.toString() + ',' + y.toString() + ')';\n            elem.style.webkitTransform = coord;\n            elem.style.width = r.toString() + 'px';\n            elem.style.height = r.toString() + 'px';\n            elem.classList.add('confetti');\n            elem.style.backgroundColor = this.getColor(i / 30);\n            elem.style.webkitTranslate = 'transform 5s linear ease-in-out';\n            container.appendChild(elem);\n        }\n        container.style.visibility = 'visible';\n    }\n\n    getOptions() {\n        this.state.tracksSelectOptions = [];\n        for (let i = 2; i <= 100; i++) {\n            this.state.tracksSelectOptions.push(i);\n        }\n    }\n\n    handleSelect(e) {\n        this.state.numberOfTracks = e.target.value;\n        sessionStorage.setItem('numTracks', e.target.value);\n\n        if (this.state.at) this.getLibrary();\n    }\n\n    render() {\n        return (\n            <div className={this.state.playlist.length > 0 ? 'Playlist home' : 'Playlist center-display'}>\n                {this.state.playlist.length > 0 ? (\n                    <h1 className=\"header playlist-h1\">Here is a list of your\n                        <span className=\"option-select\">\n                            <select name=\"Select up to which recent tracks you would like to view\"\n                                    onChange={this.handleSelect}>\n                                {this.state.tracksSelectOptions.map((i) => {\n                                    return (<option value={i} selected={i.toString() === this.state.numberOfTracks}>{i}</option>);\n                                })}\n                            </select>\n                        </span>\n                        most recently added tracks:</h1>) : (\n                    <h1 className=\"header\">See your Spotify\n                        <span className=\"option-select\">\n                            <select name=\"Select up to which recent tracks you would like to view\"\n                                    onChange={this.handleSelect}>\n                                {this.state.tracksSelectOptions.map((i) => {\n                                    return (<option value={i} selected={i === 20}>{i}</option>);\n                                })}\n                            </select>\n                        </span>Recently Added tracks, and make it into a playlist</h1>)}\n                {this.state.playlist.length > 0 ? (\n                    <span>\n                        <ul className=\"playlist-container\">\n                                {this.state.playlist.map(\n                                    (track, index) => {\n                                        return (\n                                            <li key={index}><Track track={track}/></li>\n                                        )\n                                    }\n                                )}\n                        </ul>\n                        <div className=\"button-div position-mid-right\">\n                            {this.state.playlistCreated ? (\n                                    <p className=\"button-link\" onClick={this.createConfetti}>Done!<span\n                                        id=\"confetti-container\"/></p>) :\n                                (<button className=\"button-link\" onClick={this.createPlaylist}>Create this playlist on\n                                    Spotify for me\n                                </button>)\n                            }\n                        </div>\n                    </span>) : (\n                    <span>\n                        <div className=\"button-div margin-top\"><a href={this.state.links.authLink}>Click on me to authorize\n                            Spotify</a>\n                        </div>\n                    </span>\n                )}\n            </div>\n        );\n    }\n}\n\nexport default Playlist;\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/Playlist/Playlist.js	(date 1579676034000)
++++ src/Playlist/Playlist.js	(date 1579676176000)
+@@ -10,7 +10,7 @@
+             code: '',
+             playlist: [],
+             playlistURI: [],
+-            ruri: 'https://iguannalin.github.io/spotify-recently-added/',
++            ruri: 'http://localhost:9008/',
+             userID: '',
+             at: '',
+             playlistCreated: false,
+@@ -48,6 +48,7 @@
+     getCode() {
+         const urlParams = new URLSearchParams(window.location.search);
+         const code = urlParams.get('code');
++        console.log('CODEEE', code)
+         this.setState({
+             code: code
+         });
+@@ -68,7 +69,9 @@
+         const refreshToken = sessionStorage.getItem('mtoken');
+         let grantType = 'authorization_code';
+         let codeType = 'code';
++        console.log('HERE MTOKEN', refreshToken, typeof refreshToken, 'TOKEN PROP', ac);
+         if (refreshToken && refreshToken !== "undefined") {
++            console.log('REFRESH TOKEN EXISTS', refreshToken);
+             this.setState({at: refreshToken});
+             ac = refreshToken;
+             grantType = 'refresh_token';
+@@ -76,6 +79,7 @@
+         }
+ 
+         const encodedBody = window.btoa(this.props.mid + ':' + this.props.ms);
++        console.log('CODE', ac);
+         fetch(this.state.endpoints.token, {
+             method: 'POST',
+             'Access-Control-Allow-Headers': {
+@@ -100,6 +104,7 @@
+                     this.setState({
+                         at: data.access_token
+                     });
++                    console.log('GETTOKEN ACCESSTOKEN', data.access_token, ' REFRESH TOKEN ', data.refresh_token)
+                     if (data.refresh_token) sessionStorage.setItem('mtoken', data.refresh_token);
+                     this.getLibrary();
+                 }
+@@ -108,6 +113,7 @@
+     }
+ 
+     getLibrary() {
++        console.log('get library TOKEN', this.state.at, 'NUM TRACKS', this.state.numberOfTracks);
+         fetch('https://api.spotify.com/v1/me/tracks?limit=' + this.state.numberOfTracks.toString(), {
+             'Access-Control-Allow-Headers': {
+                 'mode': 'no-cors',
+@@ -119,7 +125,7 @@
+         })
+             .then(r => {
+                 if (r.ok) return r.json(); else {
+-                    console.error('Error: getLibrary');
++                    console.error('Error: getLibrary', r);
+                     sessionStorage.removeItem('mtoken');
+                 }
+             })
+@@ -146,6 +152,7 @@
+                         }),
+                         albumArt: item.album.images
+                     };
++                    // console.log('TRACK', track);
+                     const tempPlaylist = this.state.playlist;
+                     const tempPlaylistURI = this.state.playlistURI;
+                     tempPlaylist.push(track);
+@@ -160,7 +167,9 @@
+     }
+ 
+     createPlaylist() {
++        console.trace();
+         const snapshotID = sessionStorage.getItem('playlistSnapshot');
++        console.log('MEOW');
+         if (snapshotID) {
+             this.addTracksToPlaylist(snapshotID);
+         } else {
+@@ -187,6 +196,7 @@
+     }
+ 
+     addTracksToPlaylist(playlistID) {
++        console.log('addtracksto', playlistID);
+         fetch(this.state.endpoints.users + 'playlists/' + playlistID + '/tracks', {
+             method: 'POST',
+             'Access-Control-Allow-Headers': {
+@@ -212,6 +222,7 @@
+     }
+ 
+     getUserID() {
++        console.log('AT', this.state.at);
+         fetch((this.state.endpoints.users + 'me'), {
+             'Access-Control-Allow-Headers': {
+                 'mode': 'no-cors',
+@@ -228,6 +239,7 @@
+             .then(data => {
+                     if (data) {
+                         this.setState({userID: data.id});
++                        console.log('USER ID', data);
+                     }
+                 }
+             );
+@@ -283,6 +295,7 @@
+         sessionStorage.setItem('numTracks', e.target.value);
+ 
+         if (this.state.at) this.getLibrary();
++        console.log('MEOW SELECTED', this.state.numberOfTracks, 'sess', sessionStorage.getItem('numTracks'), ' tar ', e.target.value)
+     }
+ 
+     render() {
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"name\": \"spotify-recently-added\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@testing-library/jest-dom\": \"^4.2.4\",\n    \"@testing-library/react\": \"^9.3.2\",\n    \"@testing-library/user-event\": \"^7.1.2\",\n    \"react\": \"^16.12.0\",\n    \"react-dom\": \"^16.12.0\",\n    \"react-scripts\": \"3.3.0\"\n  },\n  \"scripts\": {\n    \"start\": \"react-scripts start\",\n    \"build\": \"react-scripts build\",\n    \"test\": \"react-scripts test\",\n    \"eject\": \"react-scripts eject\",\n    \"predeploy\": \"yarn build\",\n    \"deploy\": \"gh-pages -d build\"\n  },\n  \"eslintConfig\": {\n    \"extends\": \"react-app\"\n  },\n  \"browserslist\": {\n    \"production\": [\n      \">0.2%\",\n      \"not dead\",\n      \"not op_mini all\"\n    ],\n    \"development\": [\n      \"last 1 chrome version\",\n      \"last 1 firefox version\",\n      \"last 1 safari version\"\n    ]\n  },\n  \"homepage\": \"https://iguannalin.github.io/spotify-recently-added/\",\n  \"devDependencies\": {\n    \"gh-pages\": \"^2.1.1\"\n  }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- package.json	(date 1579676034000)
++++ package.json	(date 1579676167000)
+@@ -6,12 +6,13 @@
+     "@testing-library/jest-dom": "^4.2.4",
+     "@testing-library/react": "^9.3.2",
+     "@testing-library/user-event": "^7.1.2",
++    "node-sass": "^4.13.0",
+     "react": "^16.12.0",
+     "react-dom": "^16.12.0",
+     "react-scripts": "3.3.0"
+   },
+   "scripts": {
+-    "start": "react-scripts start",
++    "start": "PORT=9008 BROWSER=firefox react-scripts start",
+     "build": "react-scripts build",
+     "test": "react-scripts test",
+     "eject": "react-scripts eject",
