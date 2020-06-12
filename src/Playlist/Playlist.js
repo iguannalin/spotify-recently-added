@@ -3,6 +3,7 @@ import Track from '../Track/Track';
 import './Playlist.scss';
 
 // TODO Generate a playlist for user, and add custom playlist cover
+// TODO Create a more dynamic title for playlist, i.e. using month name
 class Playlist extends Component {
     constructor(props) {
         super(props);
@@ -14,6 +15,7 @@ class Playlist extends Component {
             userID: '',
             at: '',
             playlistCreated: false,
+            playlistCreatedLink: '',
             endpoints: {
                 authorize: 'https://accounts.spotify.com/authorize',
                 token: 'https://accounts.spotify.com/api/token',
@@ -41,7 +43,9 @@ class Playlist extends Component {
         this.generateAuthLink();
         this.getToken(this.getCode());
         if (sessionStorage.getItem('numTracks')) {
-            this.state.numberOfTracks = sessionStorage.getItem('numTracks');
+            this.setState({
+                numberOfTracks: sessionStorage.getItem('numTracks')
+            });
         }
     }
 
@@ -96,7 +100,7 @@ class Playlist extends Component {
                 }
             })
             .then(data => {
-                if (data && data.access_token) {
+                if (data && data.access_token) {x
                     this.setState({
                         at: data.access_token
                     });
@@ -160,6 +164,8 @@ class Playlist extends Component {
     }
 
     createPlaylist() {
+        const d = new Date();
+        const month = d.toDateString().split(' ')[1];
         const snapshotID = sessionStorage.getItem('playlistSnapshot');
         if (snapshotID) {
             this.addTracksToPlaylist(snapshotID);
@@ -174,14 +180,19 @@ class Playlist extends Component {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.state.at}`
                 },
-                body: `{"name":"Recently Added","public":false,"description":"Sometimes you just want to listen to your newest obsessions. Happy 2020! - Anna :)"}`
+                body: `{"name":"` + month + ` - Recently Added","public":false,"description":"Created with love by Anna at https://iguannalin.github.io/spotify-recently-added/"}`
             })
                 .then(r => {
                     if (r.ok) return r.json();
                     else console.error('Error: createPlaylist');
                 })
                 .then(data => {
-                    if (data) this.addTracksToPlaylist(data.id);
+                    if (data) {
+                        this.addTracksToPlaylist(data.id);
+                        this.setState({
+                            playlistCreatedLink: data.href
+                        });
+                    }
                 });
         }
     }
@@ -272,14 +283,18 @@ class Playlist extends Component {
     }
 
     getOptions() {
-        this.state.tracksSelectOptions = [];
+        this.setState({
+            tracksSelectOptions: []
+        });
         for (let i = 2; i <= 50; i++) {
             this.state.tracksSelectOptions.push(i);
         }
     }
 
     handleSelect(e) {
-        this.state.numberOfTracks = e.target.value;
+        this.setState({
+            numberOfTracks: e.target.value
+        });
         sessionStorage.setItem('numTracks', e.target.value);
 
         if (this.state.at) this.getLibrary();
@@ -294,7 +309,8 @@ class Playlist extends Component {
                             <select name="Select up to which recent tracks you would like to view"
                                     onChange={this.handleSelect}>
                                 {this.state.tracksSelectOptions.map((i) => {
-                                    return (<option value={i} selected={i.toString() === this.state.numberOfTracks}>{i}</option>);
+                                    return (<option value={i}
+                                                    selected={i.toString() === this.state.numberOfTracks}>{i}</option>);
                                 })}
                             </select>
                         </span>
@@ -321,8 +337,10 @@ class Playlist extends Component {
                         </ul>
                         <div className="button-div position-mid-right">
                             {this.state.playlistCreated ? (
-                                    <p className="button-link" onClick={this.createConfetti}>Done!<span
-                                        id="confetti-container"/></p>) :
+                                    <p className="button-link" onClick={this.createConfetti}>
+                                        <a href={this.state.playlistCreatedLink}
+                                           aria-label="Click on this link to go to playlist on Spotify">Done!</a>
+                                        <span id="confetti-container"/></p>) :
                                 (<button className="button-link" onClick={this.createPlaylist}>Create this playlist on
                                     Spotify for me
                                 </button>)
