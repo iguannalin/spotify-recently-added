@@ -100,7 +100,7 @@ class Playlist extends Component {
                 }
             })
             .then(data => {
-                if (data && data.access_token) {x
+                if (data && data.access_token) {
                     this.setState({
                         at: data.access_token
                     });
