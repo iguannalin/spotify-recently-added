@@ -178,14 +178,19 @@ class Playlist extends Component {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.state.at}`
                 },
-                body: `{"name":"Recently Added","public":false,"description":"Sometimes you just want to listen to your newest obsessions. Happy 2020! - Anna :)"}`
+                body: `{"name":"` + month + ` - Recently Added","public":false,"description":"Created with love by Anna at https://iguannalin.github.io/spotify-recently-added/"}`
             })
                 .then(r => {
                     if (r.ok) return r.json();
                     else console.error('Error: createPlaylist');
                 })
                 .then(data => {
-                    if (data) this.addTracksToPlaylist(data.id);
+                    if (data) {
+                        this.addTracksToPlaylist(data.id);
+                        this.setState({
+                            playlistCreatedLink: data.href
+                        });
+                    }
                 });
         }
     }
