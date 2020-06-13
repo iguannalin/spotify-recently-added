@@ -13,7 +13,7 @@ class Playlist extends Component {
             ruri: 'https://iguannalin.github.io/spotify-recently-added/',
             userID: '',
             at: '',
-            playlistCreated: sessionStorage.getItem('playlistSnapshot') && true,
+            playlistCreated: false,
             playlistCreatedLink: '',
             endpoints: {
                 authorize: 'https://accounts.spotify.com/authorize',
@@ -277,7 +277,7 @@ class Playlist extends Component {
     }
 
     handleSelect(e) {
-        this.state.numberOfTracks = e.target.value;
+        this.setState({numberOfTracks: e.target.value});
         sessionStorage.setItem('numTracks', e.target.value);
 
         if (this.state.at) this.getLibrary();
@@ -320,8 +320,9 @@ class Playlist extends Component {
                         </ul>
                         <div className="button-div position-mid-right">
                             {this.state.playlistCreated ? (
-                                    <p className="button-link" onClick={this.createConfetti}>Done!<span
-                                        id="confetti-container"/></p>) :
+                                    <a className="button-link" onMouseEnter={this.createConfetti}
+                                       href={this.state.playlistCreatedLink}
+                                       target="_blank"><span>Go to playlist<span id="confetti-container"/></span></a>) :
                                 (<button className="button-link" onClick={this.createPlaylist}>Create this playlist on
                                     Spotify for me
                                 </button>)
