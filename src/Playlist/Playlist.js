@@ -13,7 +13,7 @@ class Playlist extends Component {
             ruri: 'https://iguannalin.github.io/spotify-recently-added/',
             userID: '',
             at: '',
-            playlistCreated: false,
+            playlistCreated: sessionStorage.getItem('playlistSnapshot') && true,
             playlistCreatedLink: '',
             endpoints: {
                 authorize: 'https://accounts.spotify.com/authorize',
@@ -23,10 +23,9 @@ class Playlist extends Component {
             links: {
                 authLink: ''
             },
-            tracksSelectOptions: [],
-            numberOfTracks: 0
+            tracksSelectOptions: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
+            numberOfTracks: sessionStorage.getItem('numTracks') || 20
         };
-        this.defaultTracksLength = 20;
         this.getLibrary = this.getLibrary.bind(this);
         this.getToken = this.getToken.bind(this);
         this.getUserID = this.getUserID.bind(this);
@@ -39,7 +38,6 @@ class Playlist extends Component {
     };
 
     componentDidMount() {
-        this.getOptions();
         this.generateAuthLink();
         this.getToken(this.getCode());
         this.state.numberOfTracks = sessionStorage.getItem('numTracks') || this.defaultTracksLength;
@@ -278,13 +276,6 @@ class Playlist extends Component {
         container.style.visibility = 'visible';
     }
 
-    getOptions() {
-        this.state.tracksSelectOptions = [];
-        for (let i = 2; i <= 50; i++) {
-            this.state.tracksSelectOptions.push(i);
-        }
-    }
-
     handleSelect(e) {
         this.state.numberOfTracks = e.target.value;
         sessionStorage.setItem('numTracks', e.target.value);
@@ -301,7 +292,8 @@ class Playlist extends Component {
                             <select name="Select up to which recent tracks you would like to view"
                                     onChange={this.handleSelect}>
                                 {this.state.tracksSelectOptions.map((i) => {
-                                    return (<option value={i} selected={i.toString() === this.state.numberOfTracks}>{i}</option>);
+                                    return (<option value={i}
+                                                    selected={i.toString() === this.state.numberOfTracks}>{i}</option>);
                                 })}
                             </select>
                         </span>
