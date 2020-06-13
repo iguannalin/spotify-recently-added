@@ -3,7 +3,6 @@ import Track from '../Track/Track';
 import './Playlist.scss';
 
 // TODO Generate a playlist for user, and add custom playlist cover
-// TODO Create a more dynamic title for playlist, i.e. using month name
 class Playlist extends Component {
     constructor(props) {
         super(props);
@@ -27,6 +26,7 @@ class Playlist extends Component {
             tracksSelectOptions: [],
             numberOfTracks: 0
         };
+        this.defaultTracksLength = 20;
         this.getLibrary = this.getLibrary.bind(this);
         this.getToken = this.getToken.bind(this);
         this.getUserID = this.getUserID.bind(this);
@@ -42,9 +42,7 @@ class Playlist extends Component {
         this.getOptions();
         this.generateAuthLink();
         this.getToken(this.getCode());
-        if (sessionStorage.getItem('numTracks')) {
-            this.state.numberOfTracks = sessionStorage.getItem('numTracks');
-        }
+        this.state.numberOfTracks = sessionStorage.getItem('numTracks') || this.defaultTracksLength;
     }
 
     getCode() {
@@ -188,7 +186,7 @@ class Playlist extends Component {
                     if (data) {
                         this.addTracksToPlaylist(data.id);
                         this.setState({
-                            playlistCreatedLink: data.href
+                            playlistCreatedLink: data.external_urls['spotify']
                         });
                     }
                 });
@@ -313,7 +311,7 @@ class Playlist extends Component {
                             <select name="Select up to which recent tracks you would like to view"
                                     onChange={this.handleSelect}>
                                 {this.state.tracksSelectOptions.map((i) => {
-                                    return (<option value={i} selected={i === 20}>{i}</option>);
+                                    return (<option value={i} selected={i === this.state.numberOfTracks}>{i}</option>);
                                 })}
                             </select>
                         </span>Recently Added tracks, and make it into a playlist</h1>)}
