@@ -24,7 +24,7 @@ class Playlist extends Component {
                 authLink: ''
             },
             tracksSelectOptions: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
-            numberOfTracks: sessionStorage.getItem('numTracks') || 20
+            numberOfTracks: 20
         };
         this.getLibrary = this.getLibrary.bind(this);
         this.getToken = this.getToken.bind(this);
@@ -34,15 +34,11 @@ class Playlist extends Component {
         this.createPlaylist = this.createPlaylist.bind(this);
         this.createConfetti = this.createConfetti.bind(this);
         this.getCode = this.getCode.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
     };
 
     componentDidMount() {
         this.generateAuthLink();
         this.getToken(this.getCode());
-        this.setState({
-            numberOfTracks: sessionStorage.getItem('numTracks') || 20
-        });
     }
 
     getCode() {
@@ -104,7 +100,6 @@ class Playlist extends Component {
                     this.getLibrary();
                 }
             });
-
     }
 
     getLibrary() {
@@ -276,13 +271,6 @@ class Playlist extends Component {
             container.appendChild(elem);
         }
         container.style.visibility = 'visible';
-    }
-
-    handleSelect(e) {
-        this.setState({numberOfTracks: e.target.value});
-        sessionStorage.setItem('numTracks', e.target.value);
-
-        if (this.state.at) this.getLibrary();
     }
 
     render() {
