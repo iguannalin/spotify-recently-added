@@ -40,7 +40,9 @@ class Playlist extends Component {
     componentDidMount() {
         this.generateAuthLink();
         this.getToken(this.getCode());
-        this.state.numberOfTracks = sessionStorage.getItem('numTracks') || this.defaultTracksLength;
+        this.setState({
+            numberOfTracks: sessionStorage.getItem('numTracks') || 20
+        });
     }
 
     getCode() {
@@ -322,7 +324,8 @@ class Playlist extends Component {
                             {this.state.playlistCreated ? (
                                     <a className="button-link" onMouseEnter={this.createConfetti}
                                        href={this.state.playlistCreatedLink}
-                                       target="_blank"><span>Go to playlist<span id="confetti-container"/></span></a>) :
+                                       target="_blank" rel="noopener noreferrer"><span>Go to playlist<span
+                                        id="confetti-container"/></span></a>) :
                                 (<button className="button-link" onClick={this.createPlaylist}>Create this playlist on
                                     Spotify for me
                                 </button>)
