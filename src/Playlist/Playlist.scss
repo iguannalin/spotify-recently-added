@@ -7,6 +7,7 @@
 }
 
 .center-display {
+  display: flex;
   justify-content: center;
   align-items: center !important;
   flex-flow: column;
