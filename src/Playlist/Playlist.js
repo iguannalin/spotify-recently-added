@@ -289,26 +289,8 @@ class Playlist extends Component {
         return (
             <div className={this.state.playlist.length > 0 ? 'Playlist home' : 'Playlist center-display'}>
                 {this.state.playlist.length > 0 ? (
-                    <h1 className="header playlist-h1">Here is a list of your
-                        <span className="option-select">
-                            <select name="Select up to which recent tracks you would like to view"
-                                    onChange={this.handleSelect}>
-                                {this.state.tracksSelectOptions.map((i) => {
-                                    return (<option value={i}
-                                                    selected={i.toString() === this.state.numberOfTracks}>{i}</option>);
-                                })}
-                            </select>
-                        </span>
-                        most recently added tracks:</h1>) : (
-                    <h1 className="header">See your Spotify
-                        <span className="option-select">
-                            <select name="Select up to which recent tracks you would like to view"
-                                    onChange={this.handleSelect}>
-                                {this.state.tracksSelectOptions.map((i) => {
-                                    return (<option value={i} selected={i === this.state.numberOfTracks}>{i}</option>);
-                                })}
-                            </select>
-                        </span>Recently Added tracks, and make it into a playlist</h1>)}
+                    <h1 className="header playlist-h1">Here is a list of your 20 most recently added tracks:</h1>) : (
+                    <h1 className="header">See your Spotify Top 20 Recently Added tracks, and make it into a playlist</h1>)}
                 {this.state.playlist.length > 0 ? (
                     <span>
                         <ul className="playlist-container">
