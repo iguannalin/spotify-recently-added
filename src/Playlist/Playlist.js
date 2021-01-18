@@ -48,6 +48,7 @@ class Playlist extends Component {
             code: code
         });
         sessionStorage.setItem('mcode', code);
+        console.log('CODE', code);
         return code;
     }
 
@@ -280,8 +281,8 @@ class Playlist extends Component {
                     <h1 className="header playlist-h1">Here is a list of your 20 most recently added tracks:</h1>) : (
                     <h1 className="header">See your Spotify Top 20 Recently Added tracks, and make it into a playlist</h1>)}
                 {this.state.playlist.length > 0 ? (
-                    <div className="content-container center-display">
-                        <div className="button-div position-mid-right">
+                    <div className="center-display">
+                        <div className="button-div">
                             {this.state.playlistCreated ? (
                                     <a className="button-link" onMouseEnter={this.createConfetti}
                                        href={this.state.playlistCreatedLink}

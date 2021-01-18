@@ -43,12 +43,6 @@ body {
         width: max-content !important;
     }
 
-    .position-mid-right {
-        position: fixed;
-        top: 10% !important;
-        right: 7%;
-    }
-
     .playlist-h1, h1.header {
         margin-left: 0 !important;
         font-size: 20px !important;
