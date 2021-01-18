@@ -5,8 +5,8 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mid: '6dc15fdee3cc4723b9f2a422b7f35305',
-            ms: 'a577356d88d340828944780fc72e6749',
+            mid: '',
+            ms: '',
             code: '',
             submitted: false
         };
@@ -27,6 +27,28 @@ class Home extends Component {
                 mid: sessionStorage.getItem('mid'),
                 ms: sessionStorage.getItem('ms')
             });
+        } else {
+            Promise.all([
+                fetch('https://spotify-secret.herokuapp.com/mid', {
+                    'Access-Control-Allow-Headers': {
+                        'mode': 'cors',
+                        'access-control-allow-origin': '*'
+
+                    }
+                }),
+                fetch('https://spotify-secret.herokuapp.com/ms', {
+                    'Access-Control-Allow-Headers': {
+                        'mode': 'cors',
+                        'access-control-allow-origin': '*'
+                    }
+                })
+            ]).then((r) => {
+                return Promise.all(r.map((response) => {
+                    return response.json();
+                }))
+            }).then((m) => {
+                    this.setState({mid: m[0], ms: m[1]});
+            })
         }
     }
 
