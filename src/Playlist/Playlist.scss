@@ -41,24 +41,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
   height: 50px;
   border-radius: 5px;
-  box-shadow: 10px 12px rgba(25, 25, 240, 0.5);
+  background-color: var(--spotify-accent-color);
+  box-shadow: 10px 12px rgba(24, 24, 24, 24);
   padding: 10px;
-  border: 1px solid black;
+  color: var(--main-text-color);
+  font-weight: bold;
 }
 
 .margin-top {
   margin-top: 10%;
 }
 
-.button-div:active {
+.button-div:hover, .button-div:active {
   font-weight: bold;
-  box-shadow: 2px 2px rgba(25, 25, 240, 0.7);
+  box-shadow: 2px 2px rgba(24, 24, 24, 24);
   transform: translate(11px, 9px);
-  border: 2px solid black;
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .position-mid-right {
@@ -68,7 +69,8 @@
 }
 
 .button-link {
-  color: rgb(106, 103, 206);
+  color: var(--main-text-color);
+  font-weight: bold;
   cursor: pointer;
   border: none;
   background: transparent;

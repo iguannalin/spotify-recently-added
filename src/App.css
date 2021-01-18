@@ -1,12 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+:root {
+    --background-color: #121212;
+    --main-text-color: #ffffff;
+    --spotify-accent-color: #1DB954;
+    --spotify-shadow-color: #1DB954;
+}
+
 body {
     margin: 0;
     font-family: 'Roboto', sans-serif;
     color: rgb(0, 0, 0);
     display: flex;
     justify-content: center;
-    background-color: #FFE767;
+    background-color: var(--background-color);
 }
 
 @media only screen and (max-width: 780px) {
@@ -80,7 +87,7 @@ body {
     flex-flow: column wrap;
     text-align: center;
     margin-top: 5%;
-    color: midnightblue;
+    color: var(--main-text-color);
 }
 
 .logo {
@@ -113,13 +120,13 @@ ul li {
 }
 
 button, li, a, a:visited, a:active {
-    color: rgb(106, 103, 206);
+    color: var(--main-text-color);
     text-decoration: none;
 }
 
 li:hover, a:hover {
     cursor: pointer;
-    color: #a177ff;
+    color: var(--main-text-color);
     text-decoration: underline;
 }
 
@@ -164,10 +171,9 @@ input[type='submit'], input[type='reset'] {
 
 input[type='submit']:hover, input[type='reset']:hover {
     cursor: pointer;
-    background-color: #a177ff;
-    border-color: #a177ff;
-    box-shadow: 0 0 0 3px #d0bbff;
-    color: #fff;
+    background-color: var(--spotify-accent-color);
+    box-shadow: 0 0 0 3px var(--spotify-shadow-color);
+    color: var(--main-text-color);
     text-decoration: none;
 }
 
