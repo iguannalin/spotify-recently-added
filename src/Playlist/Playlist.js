@@ -280,16 +280,7 @@ class Playlist extends Component {
                     <h1 className="header playlist-h1">Here is a list of your 20 most recently added tracks:</h1>) : (
                     <h1 className="header">See your Spotify Top 20 Recently Added tracks, and make it into a playlist</h1>)}
                 {this.state.playlist.length > 0 ? (
-                    <span>
-                        <ul className="playlist-container">
-                                {this.state.playlist.map(
-                                    (track, index) => {
-                                        return (
-                                            <li key={index}><Track track={track}/></li>
-                                        )
-                                    }
-                                )}
-                        </ul>
+                    <div className="content-container center-display">
                         <div className="button-div position-mid-right">
                             {this.state.playlistCreated ? (
                                     <a className="button-link" onMouseEnter={this.createConfetti}
@@ -301,7 +292,16 @@ class Playlist extends Component {
                                 </button>)
                             }
                         </div>
-                    </span>) : (
+                        <ul className="playlist-container center-display">
+                                {this.state.playlist.map(
+                                    (track, index) => {
+                                        return (
+                                            <li key={index}><Track track={track}/></li>
+                                        )
+                                    }
+                                )}
+                        </ul>
+                    </div>) : (
                     <span>
                         <div className="button-div margin-top"><a href={this.state.links.authLink}>Click on me to authorize
                             Spotify</a>

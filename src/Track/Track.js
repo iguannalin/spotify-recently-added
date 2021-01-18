@@ -5,7 +5,7 @@ class Track extends Component {
     render() {
         return (
             <span className="Track">
-                <span className="track-vinyl-center"></span>
+                <span className="track-vinyl-center">.</span>
                 <span className="track-image-small">
                     <img alt={'Album cover of ' + this.props.track.name + ' by ' + this.props.track.artists[0].name}
                          src={this.props.track.albumArt[1].url}/>

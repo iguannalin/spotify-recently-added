@@ -22,6 +22,10 @@
   height: 250px;
   border: 1px solid white;
   border-radius: 50%;
+  border-image: linear-gradient(149.46deg,#450af5,#8e8ee5 99.16%);
+  border-image-width: 1;
+  border-image-width: 15px;
+  border-style: solid;
 }
 
 .Track:hover .track-image-small img {
