@@ -37,7 +37,7 @@ class Playlist extends Component {
     };
 
     componentDidMount() {
-        this.generateAuthLink();
+        if (this.props.mid && this.props.ms) this.generateAuthLink();
         this.getToken(this.getCode());
     }
 
@@ -48,7 +48,6 @@ class Playlist extends Component {
             code: code
         });
         sessionStorage.setItem('mcode', code);
-        console.log('CODE', code);
         return code;
     }
 
@@ -279,7 +278,8 @@ class Playlist extends Component {
             <div className={this.state.playlist.length > 0 ? 'Playlist home' : 'Playlist center-display'}>
                 {this.state.playlist.length > 0 ? (
                     <h1 className="header playlist-h1">Here is a list of your 20 most recently added tracks:</h1>) : (
-                    <h1 className="header">See your Spotify Top 20 Recently Added tracks, and make it into a playlist</h1>)}
+                    <h1 className="header">See your Spotify Top 20 Recently Added tracks, and make it into a
+                        playlist</h1>)}
                 {this.state.playlist.length > 0 ? (
                     <div className="center-display">
                         <div className="button-div">
@@ -294,13 +294,13 @@ class Playlist extends Component {
                             }
                         </div>
                         <ul className="playlist-container center-display">
-                                {this.state.playlist.map(
-                                    (track, index) => {
-                                        return (
-                                            <li key={index}><Track track={track}/></li>
-                                        )
-                                    }
-                                )}
+                            {this.state.playlist.map(
+                                (track, index) => {
+                                    return (
+                                        <li key={index}><Track track={track}/></li>
+                                    )
+                                }
+                            )}
                         </ul>
                     </div>) : (
                     <span>
