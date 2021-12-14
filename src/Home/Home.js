@@ -51,7 +51,13 @@ class Home extends Component {
     render() {
         if (!this.state.mid || !this.state.ms) {
             return (<div className="Home">
-                <span>Loading...</span>
+                <div className="loading-container">
+                    <div alt="Loading" className="loading">
+                        <div className="line"></div>
+                        <div className="line"></div>
+                        <div className="line"></div>
+                    </div>
+                </div>
             </div>);
         } else {
             return (
