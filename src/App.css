@@ -23,6 +23,12 @@ body {
         flex-flow: column wrap;
     }
 
+    .Home {
+        padding: 15% 10%;
+        width: 100vw;
+        box-sizing: border-box;
+    }
+
     .card {
         width: auto;
         background-color: white;
@@ -61,6 +67,11 @@ body {
         justify-content: center;
         align-items: center;
         flex-flow: row wrap;
+    }
+
+    .Home {
+        width: 100vw;
+        margin: 10%;
     }
 
     .card {
